@@ -60,7 +60,7 @@ export default function GfgScreen({ onBack }) {
                   <span className="text-slate-400 text-sm md:text-base font-normal font-mono-custom ml-2">Student Chapter</span>
                 </h1>
                 <p className="text-[10px] text-cyan-400/90 font-mono-custom uppercase tracking-widest mt-1">
-                  OFFICIAL ACM STUDENT CHAPTER · ORGANIZERS OF DSFRUTAR-2K26
+                  OFFICIAL ACM STUDENT CHAPTER · ORGANIZERS OF DISFRUTAR-2K26
                 </p>
               </div>
             </div>
@@ -88,7 +88,7 @@ export default function GfgScreen({ onBack }) {
                   The <span className="text-[#00F0FF] font-semibold">ACM KARE Student Chapter</span> is an internationally affiliated student computing body dedicated to fostering research, algorithmic thinking, systems architecture, and state-of-the-art AI development.
                 </p>
                 <p>
-                  We coordinate national computing symposia, research workshops, and flagship innovation conclaves like <span className="text-[#00FF88] font-semibold drop-shadow-[0_0_8px_rgba(0,255,136,0.5)]">DSFRUTAR-2K26</span>. Connect with our leadership and community members below.
+                  We coordinate national computing symposia, research workshops, and flagship innovation conclaves like <span className="text-[#00FFFF] font-semibold drop-shadow-[0_0_8px_rgba(0,255,255,0.5)]">DISFRUTAR-2K26</span>. Connect with our leadership and community members below.
                 </p>
               </div>
             </div>

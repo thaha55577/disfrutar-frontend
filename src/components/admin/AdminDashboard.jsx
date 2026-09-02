@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Users, Activity, HardDrive, RefreshCw, Cpu, Server, LogOut, Play, Square, Clock, Lock, Unlock, FileText, UploadCloud, CheckCircle, AlertTriangle, Trash2, X, Star, MessageSquare, ChevronDown, ChevronUp, GitBranch, Download, Link2 } from 'lucide-react';
+import { Shield, Users, Activity, HardDrive, RefreshCw, Cpu, LogOut, Play, Square, Clock, Lock, FileText, UploadCloud, CheckCircle, AlertTriangle, Trash2, X, Star, MessageSquare, ChevronDown, ChevronUp, GitBranch, Download, Link2 } from 'lucide-react';
 import AcmLogo from '../AcmLogo';
 import { API_BASE_URL } from '../../utils/api';
 
@@ -75,9 +75,6 @@ export default function AdminDashboard({ onLock }) {
  const [purgeCertsSuccess, setPurgeCertsSuccess] = useState('');
  const [isPurgingCerts, setIsPurgingCerts] = useState(false);
  const [certSortOrder, setCertSortOrder] = useState('none'); // 'none', 'asc', 'desc'
-
-  // GitHub Repo Links section state
-  const [showRepoLinksSection, setShowRepoLinksSection] = useState(true);
 
  const toggleCertSort = () => {
  setCertSortOrder((prev) => {
@@ -847,7 +844,7 @@ export default function AdminDashboard({ onLock }) {
 
  {/* Statistics Grid */}
  <section className="grid grid-cols-1 md:grid-cols-5 gap-6">
- <div className="bg-zinc-950 border-2 border-emerald-500/50 rounded-sm p-5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] flex items-center gap-4">
+ <div className="bg-zinc-950 border-2 border-cyan-500/50 rounded-sm p-5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] flex items-center gap-4">
  <div className="p-3 bg-cyan-500/10 rounded-sm text-cyan-400 border border-cyan-500/50">
  <Users className="w-6 h-6" />
  </div>
@@ -857,13 +854,13 @@ export default function AdminDashboard({ onLock }) {
  </div>
  </div>
 
- <div className="bg-zinc-950 border-2 border-emerald-500/50 rounded-sm p-5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] flex items-center gap-4">
- <div className={`p-3 rounded-sm border ${isDeleteProtectionActive ? 'bg-rose-500/10 text-rose-400 border-rose-500/50 animate-pulse' : 'bg-yellow-500/10 text-yellow-400 border-yellow-500/50'}`}>
+ <div className="bg-zinc-950 border-2 border-cyan-500/50 rounded-sm p-5 shadow-[0_4px_12px_rgba(0,0,0,0.5)] flex items-center gap-4">
+ <div className={`p-3 rounded-sm border ${isDeleteProtectionActive ? 'bg-rose-500/10 text-rose-400 border-rose-500/50 animate-pulse' : 'bg-blue-500/10 text-[#00FFFF] border-blue-500/50'}`}>
  <Shield className="w-6 h-6" />
  </div>
  <div className="text-left">
  <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider font-sans">Delete Protection</p>
- <h3 className={`text-2xl font-bold font-mono mt-1 ${isDeleteProtectionActive ? 'text-rose-400' : 'text-yellow-400'}`}>
+ <h3 className={`text-2xl font-bold font-mono mt-1 ${isDeleteProtectionActive ? 'text-rose-400' : 'text-[#00FFFF]'}`}>
  {isDeleteProtectionActive ? 'LOCKED' : 'MUTABLE'}
  </h3>
  </div>
@@ -874,12 +871,12 @@ export default function AdminDashboard({ onLock }) {
 
 
  <div className="bg-white/5 border border-white/10 rounded-xl p-5 shadow-md flex items-center gap-4">
- <div className={`p-3 rounded-xl border ${isFeedbackEnabled ? 'bg-yellow-500/10 text-yellow-400 border-yellow-500/25 animate-pulse' : 'bg-zinc-800/40 text-slate-500 border-zinc-700/25'}`}>
+ <div className={`p-3 rounded-xl border ${isFeedbackEnabled ? 'bg-blue-500/10 text-[#00FFFF] border-blue-500/25 animate-pulse' : 'bg-zinc-800/40 text-slate-500 border-zinc-700/25'}`}>
  <Activity className="w-6 h-6" />
  </div>
  <div className="text-left">
  <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider font-sans">Feedback Gate</p>
- <h3 className={`text-2xl font-bold font-mono mt-1 ${isFeedbackEnabled ? 'text-yellow-400' : 'text-slate-500'}`}>
+ <h3 className={`text-2xl font-bold font-mono mt-1 ${isFeedbackEnabled ? 'text-[#00FFFF]' : 'text-slate-500'}`}>
  {isFeedbackEnabled ? 'OPEN' : 'CLOSED'}
  </h3>
  </div>
@@ -930,7 +927,7 @@ export default function AdminDashboard({ onLock }) {
 
  {/* Gate warning if selection not enabled yet */}
  {!isSelectionEnabled && (
- <div className="flex items-center gap-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 text-[10px] font-sans">
+ <div className="flex items-center gap-2 p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-[#00FFFF] text-[10px] font-sans">
  <Lock className="w-3.5 h-3.5 shrink-0" />
  <span>Selection Gate must be <strong>enabled</strong> before the timer can launch.</span>
  </div>
@@ -998,7 +995,7 @@ export default function AdminDashboard({ onLock }) {
  </section>
 
  {/* Server & System status panel */}
- <section className="lg:col-span-1 bg-zinc-950 border-2 border-emerald-500/50 rounded-sm p-6 shadow-xl text-left flex flex-col justify-between">
+ <section className="lg:col-span-1 bg-zinc-950 border-2 border-cyan-500/50 rounded-sm p-6 shadow-xl text-left flex flex-col justify-between">
  <div>
  <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-4 border-b border-white/5 pb-2">
  System Services
@@ -1011,12 +1008,12 @@ export default function AdminDashboard({ onLock }) {
 
 
  {/* Problems CSV Status */}
- <div className={`flex items-center justify-between p-3 rounded-xl border ${problemsCsvUploaded ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-amber-500/5 border-amber-500/20'}`}>
+ <div className={`flex items-center justify-between p-3 rounded-xl border ${problemsCsvUploaded ? 'bg-cyan-500/5 border-cyan-500/20' : 'bg-blue-500/5 border-blue-500/20'}`}>
  <div className="flex items-center gap-2">
- <FileText className={`w-4 h-4 ${problemsCsvUploaded ? 'text-emerald-400' : 'text-amber-400'}`} />
+ <FileText className={`w-4 h-4 ${problemsCsvUploaded ? 'text-cyan-400' : 'text-[#00FFFF]'}`} />
  <span className="text-xs">Problems CSV</span>
  </div>
- <span className={`text-[10px] font-bold ${problemsCsvUploaded ? 'text-emerald-400' : 'text-amber-400 animate-pulse'}`}>
+ <span className={`text-[10px] font-bold ${problemsCsvUploaded ? 'text-cyan-400' : 'text-[#00FFFF] animate-pulse'}`}>
  {problemsCsvUploaded ? 'UPLOADED' : 'MISSING'}
  </span>
  </div>
@@ -1025,15 +1022,15 @@ export default function AdminDashboard({ onLock }) {
  <div className="flex flex-col gap-2 p-3 bg-[#0d0e12] rounded-xl border border-white/5">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-2">
- <Cpu className="w-4 h-4 text-emerald-400" />
+ <Cpu className="w-4 h-4 text-cyan-400" />
  <span>Selection Gate</span>
  </div>
- <span className={`text-[10px] font-bold ${isSelectionEnabled ? 'text-emerald-400' : 'text-rose-400 animate-pulse'}`}>
+ <span className={`text-[10px] font-bold ${isSelectionEnabled ? 'text-cyan-400' : 'text-rose-400 animate-pulse'}`}>
  {isSelectionEnabled ? 'ENABLED' : 'LOCKED'}
  </span>
  </div>
  {!problemsCsvUploaded && !isSelectionEnabled && (
- <p className="text-[9px] text-amber-400/70 font-sans italic">Upload Problems CSV first to unlock</p>
+ <p className="text-[9px] text-[#00FFFF]/70 font-sans italic">Upload Problems CSV first to unlock</p>
  )}
  <button
  onClick={handleToggleSelection}
@@ -1042,7 +1039,7 @@ export default function AdminDashboard({ onLock }) {
  ? 'bg-zinc-900 text-slate-600 border border-white/5 cursor-not-allowed'
  : isSelectionEnabled
  ? 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 cursor-pointer'
- : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 cursor-pointer'
+ : 'bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/20 cursor-pointer'
  }`}
  >
  {isSelectionEnabled ? 'Lock Selection' : 'Enable Selection'}
@@ -1053,7 +1050,7 @@ export default function AdminDashboard({ onLock }) {
  <div className="flex flex-col gap-2 p-3 bg-[#0d0e12] rounded-xl border border-white/5">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-2">
- <Lock className="w-4 h-4 text-emerald-400" />
+ <Lock className="w-4 h-4 text-cyan-400" />
  <span>Delete Lock</span>
  </div>
  <span className={`text-[10px] font-bold ${isDeleteProtectionActive ? 'text-rose-400 animate-pulse font-extrabold' : 'text-slate-500'}`}>
@@ -1063,7 +1060,7 @@ export default function AdminDashboard({ onLock }) {
  <button
  onClick={handleToggleDeleteProtection}
  className={`mt-1.5 w-full py-1.5 rounded-xl text-[10px] font-bold transition-all uppercase cursor-pointer ${isDeleteProtectionActive
- ? 'bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/20'
+ ? 'bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-400 border border-cyan-500/20'
  : 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20'
  }`}
  >
@@ -1075,10 +1072,10 @@ export default function AdminDashboard({ onLock }) {
  <div className="flex flex-col gap-2 p-3 bg-[#0d0e12] rounded-xl border border-white/5">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-2">
- <Users className="w-4 h-4 text-emerald-400" />
+ <Users className="w-4 h-4 text-cyan-400" />
  <span>Team Selections</span>
  </div>
- <span className={`text-[10px] font-bold ${showTeamsSection ? 'text-emerald-400' : 'text-slate-500'}`}>
+ <span className={`text-[10px] font-bold ${showTeamsSection ? 'text-cyan-400' : 'text-slate-500'}`}>
  {showTeamsSection ? 'VISIBLE' : 'HIDDEN'}
  </span>
  </div>
@@ -1086,7 +1083,7 @@ export default function AdminDashboard({ onLock }) {
  onClick={() => setShowTeamsSection(!showTeamsSection)}
  className={`mt-1.5 w-full py-1.5 rounded-xl text-[10px] font-bold transition-all uppercase cursor-pointer ${showTeamsSection
  ? 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20'
- : 'bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20'
+ : 'bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/20'
  }`}
  >
  {showTeamsSection ? 'Hide Teams' : 'Show Teams'}
@@ -1119,10 +1116,10 @@ export default function AdminDashboard({ onLock }) {
  <div className="flex flex-col gap-2 p-3 bg-[#0d0e12] rounded-xl border border-white/5">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-2">
- <Activity className="w-4 h-4 text-yellow-400" />
+ <Activity className="w-4 h-4 text-[#00FFFF]" />
  <span>Feedback Gate</span>
  </div>
- <span className={`text-[10px] font-bold ${isFeedbackEnabled ? 'text-yellow-400 animate-pulse font-extrabold' : 'text-slate-500'
+ <span className={`text-[10px] font-bold ${isFeedbackEnabled ? 'text-[#00FFFF] animate-pulse font-extrabold' : 'text-slate-500'
  }`}>
  {isFeedbackEnabled ? 'OPEN' : 'CLOSED'}
  </span>
@@ -1132,7 +1129,7 @@ export default function AdminDashboard({ onLock }) {
  onClick={handleToggleFeedback}
  className={`mt-1.5 w-full py-1.5 rounded-xl text-[10px] font-bold transition-all uppercase cursor-pointer ${isFeedbackEnabled
  ? 'bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20'
- : 'bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/20'
+ : 'bg-blue-500/10 hover:bg-blue-500/20 text-[#00FFFF] border border-blue-500/20'
  }`}
  >
  {isFeedbackEnabled ? 'Close Feedback' : 'Open Feedback'}
@@ -1156,12 +1153,12 @@ export default function AdminDashboard({ onLock }) {
  {/* 🗺️ ROADMAP TIMELINE CONTROLLER */}
  <section className="bg-zinc-950 border-2 border-blue-500/50 rounded-sm p-6 shadow-xl text-left relative overflow-hidden">
  <div className="absolute top-0 right-0 p-8 opacity-5">
- <Cpu className="w-36 h-36 text-blue-400" />
+ <Cpu className="w-36 h-36 text-[#00FFFF]" />
  </div>
 
  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-3 border-b border-white/5 relative z-10 gap-3">
  <div>
- <h2 className="text-md font-bold text-blue-400 uppercase tracking-wider flex items-center gap-2">
+ <h2 className="text-md font-bold text-[#00FFFF] uppercase tracking-wider flex items-center gap-2">
  <span>Roadmap Timeline Controller</span>
  </h2>
  <p className="text-[10px] text-slate-500 uppercase mt-0.5 tracking-wider">
@@ -1171,10 +1168,10 @@ export default function AdminDashboard({ onLock }) {
 
  <div className="flex items-center gap-2">
  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold border ${currentPhaseIdx < 8
- ? 'bg-blue-500/10 border-blue-500/20 text-blue-400'
- : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 font-extrabold animate-pulse'
+ ? 'bg-blue-500/10 border-blue-500/20 text-[#00FFFF]'
+ : 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400 font-extrabold animate-pulse'
  }`}>
- <span className={`w-1.5 h-1.5 rounded-full ${currentPhaseIdx < 8 ? 'bg-blue-400' : 'bg-emerald-400'}`}></span>
+ <span className={`w-1.5 h-1.5 rounded-full ${currentPhaseIdx < 8 ? 'bg-blue-400' : 'bg-cyan-400'}`}></span>
  {currentPhaseIdx < 8 ? `ACTIVE PHASE: ${ROADMAP_PHASES[currentPhaseIdx].name.toUpperCase()}` : 'ALL PHASES COMPLETED'}
  </span>
 
@@ -1196,18 +1193,17 @@ export default function AdminDashboard({ onLock }) {
  {ROADMAP_PHASES.map((phase, idx) => {
  const isCompleted = idx < currentPhaseIdx;
  const isCurrent = idx === currentPhaseIdx;
- const isUpcoming = idx > currentPhaseIdx;
 
  let cardClass = "bg-[#0d0e12] border-white/5 text-slate-500 hover:border-white/10";
  let statusText = "UPCOMING";
  let badgeClass = "bg-zinc-800 text-slate-500 border-zinc-700/50";
 
  if (isCompleted) {
- cardClass = "bg-emerald-500/5 border-emerald-500/20 text-emerald-400 hover:border-emerald-500/40";
+ cardClass = "bg-cyan-500/5 border-cyan-500/20 text-cyan-400 hover:border-cyan-500/40";
  statusText = "COMPLETED";
- badgeClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/25";
+ badgeClass = "bg-cyan-500/10 text-cyan-400 border-cyan-500/25";
  } else if (isCurrent) {
- cardClass = "bg-blue-500/10 border-blue-500/40 text-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.15)] ring-1 ring-blue-500/30 hover:border-blue-500/60";
+ cardClass = "bg-blue-500/10 border-blue-500/40 text-[#00FFFF] shadow-[0_0_15px_rgba(0,255,255,0.15)] ring-1 ring-blue-500/30 hover:border-blue-500/60";
  statusText = "CURRENT";
  badgeClass = "bg-blue-500 text-black border-blue-400 font-extrabold";
  }
@@ -1356,24 +1352,24 @@ export default function AdminDashboard({ onLock }) {
 
  const starColor = (star) => {
  if (star <= 2) return { bar: 'bg-rose-500', text: 'text-rose-400', glow: 'shadow-[0_0_6px_rgba(239,68,68,0.4)]' };
- if (star === 3) return { bar: 'bg-amber-500', text: 'text-amber-400', glow: 'shadow-[0_0_6px_rgba(245,158,11,0.4)]' };
- return { bar: 'bg-emerald-500', text: 'text-emerald-400', glow: 'shadow-[0_0_6px_rgba(16,185,129,0.4)]' };
+ if (star === 3) return { bar: 'bg-blue-500', text: 'text-[#00FFFF]', glow: 'shadow-[0_0_6px_rgba(245,158,11,0.4)]' };
+ return { bar: 'bg-cyan-500', text: 'text-cyan-400', glow: 'shadow-[0_0_6px_rgba(16,185,129,0.4)]' };
  };
 
- const avgColor = avgRating >= 4 ? 'text-emerald-400' : avgRating >= 3 ? 'text-amber-400' : 'text-rose-400';
+ const avgColor = avgRating >= 4 ? 'text-cyan-400' : avgRating >= 3 ? 'text-[#00FFFF]' : 'text-rose-400';
  const avgGlow = avgRating >= 4 ? 'drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]' : avgRating >= 3 ? 'drop-shadow-[0_0_8px_rgba(245,158,11,0.5)]' : 'drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]';
 
  return (
- <section className="bg-white/5 border border-yellow-500/20 rounded-2xl p-6 shadow-xl text-left relative overflow-hidden">
+ <section className="bg-white/5 border border-blue-500/20 rounded-2xl p-6 shadow-xl text-left relative overflow-hidden">
  {/* Ambient glow */}
  <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
- <Star className="w-36 h-36 text-yellow-400" />
+ <Star className="w-36 h-36 text-[#00FFFF]" />
  </div>
 
  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-3 border-b border-white/5 relative z-10 gap-3">
  <div>
- <h2 className="text-md font-bold text-yellow-400 uppercase tracking-wider flex items-center gap-2">
- <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
+ <h2 className="text-md font-bold text-[#00FFFF] uppercase tracking-wider flex items-center gap-2">
+ <Star className="w-5 h-5 text-[#00FFFF] fill-blue-400" />
  <span>Feedback Analytics — Rating Distribution</span>
  </h2>
  <p className="text-[10px] text-slate-500 uppercase mt-0.5 tracking-wider">
@@ -1383,7 +1379,7 @@ export default function AdminDashboard({ onLock }) {
  <button
  id="admin-view-all-feedbacks-btn"
  onClick={() => setShowFeedbackViewer(true)}
- className="flex items-center gap-2 text-[11px] font-bold text-yellow-400 hover:text-black bg-yellow-500/10 hover:bg-yellow-400 border border-yellow-500/30 hover:border-yellow-400 px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer uppercase tracking-wider hover:shadow-[0_0_15px_rgba(234,179,8,0.3)] hover:scale-[1.02] active:scale-[0.98]"
+ className="flex items-center gap-2 text-[11px] font-bold text-[#00FFFF] hover:text-black bg-blue-500/10 hover:bg-blue-400 border border-blue-500/30 hover:border-blue-400 px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer uppercase tracking-wider hover:shadow-[0_0_15px_rgba(0,255,255,0.3)] hover:scale-[1.02] active:scale-[0.98]"
  >
  <MessageSquare className="w-3.5 h-3.5" />
  View All Feedbacks
@@ -1393,7 +1389,7 @@ export default function AdminDashboard({ onLock }) {
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 relative z-10">
 
  {/* Average Score Display */}
- <div className="flex flex-col items-center justify-center p-6 bg-black/40 border border-yellow-500/15 rounded-2xl gap-3">
+ <div className="flex flex-col items-center justify-center p-6 bg-black/40 border border-blue-500/15 rounded-2xl gap-3">
  <span className="text-[10px] text-slate-500 uppercase tracking-widest font-sans">Overall Average</span>
  <div className={`text-6xl font-black font-mono ${avgColor} ${avgGlow} transition-all duration-500`}>
  {totalResponses > 0 ? avgRating.toFixed(1) : '—'}
@@ -1404,7 +1400,7 @@ export default function AdminDashboard({ onLock }) {
  <Star
  key={s}
  className={`w-5 h-5 transition-all duration-300 ${s <= Math.round(avgRating)
- ? 'text-yellow-400 fill-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.5)]'
+ ? 'text-[#00FFFF] fill-blue-400 drop-shadow-[0_0_4px_rgba(0,255,255,0.5)]'
  : 'text-zinc-700 fill-zinc-800'
  }`}
  />
@@ -1453,15 +1449,15 @@ export default function AdminDashboard({ onLock }) {
  })()}
 
  {/* 🗂️ PROBLEM STATEMENTS CSV UPLOAD ZONE */}
- <section className="bg-zinc-950 border-2 border-amber-500/50 rounded-sm p-6 shadow-xl text-left relative overflow-hidden">
+ <section className="bg-zinc-950 border-2 border-blue-500/50 rounded-sm p-6 shadow-xl text-left relative overflow-hidden">
  <div className="absolute top-0 right-0 p-8 opacity-5">
- <FileText className="w-36 h-36 text-amber-400" />
+ <FileText className="w-36 h-36 text-[#00FFFF]" />
  </div>
 
  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-3 border-b border-white/5 relative z-10 gap-3">
  <div>
- <h2 className="text-md font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
- <FileText className="w-5 h-5 text-amber-400" />
+ <h2 className="text-md font-bold text-[#00FFFF] uppercase tracking-wider flex items-center gap-2">
+ <FileText className="w-5 h-5 text-[#00FFFF]" />
  <span>Problem Statements CSV — S3 Upload</span>
  </h2>
  <p className="text-[10px] text-slate-500 uppercase mt-0.5">
@@ -1470,10 +1466,10 @@ export default function AdminDashboard({ onLock }) {
  </div>
  <div className="flex items-center gap-2">
  <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold border ${problemsCsvUploaded
- ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
- : 'bg-amber-500/10 border-amber-500/20 text-amber-400 animate-pulse'
+ ? 'bg-cyan-500/10 border-cyan-500/20 text-cyan-400'
+ : 'bg-blue-500/10 border-blue-500/20 text-[#00FFFF] animate-pulse'
  }`}>
- <span className={`w-1.5 h-1.5 rounded-full ${problemsCsvUploaded ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
+ <span className={`w-1.5 h-1.5 rounded-full ${problemsCsvUploaded ? 'bg-cyan-400' : 'bg-blue-400'}`}></span>
  {problemsCsvUploaded ? 'CSV UPLOADED TO S3' : 'AWAITING UPLOAD'}
  </span>
  {problemsCsvUploaded && (
@@ -1496,8 +1492,8 @@ export default function AdminDashboard({ onLock }) {
  )}
 
  {problemsCsvUploadMessage && (
- <div className="mb-5 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-xs flex items-center gap-2.5 font-sans">
- <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+ <div className="mb-5 p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400 text-xs flex items-center gap-2.5 font-sans">
+ <CheckCircle className="w-5 h-5 text-cyan-400 shrink-0" />
  <span>{problemsCsvUploadMessage}</span>
  </div>
  )}
@@ -1505,22 +1501,22 @@ export default function AdminDashboard({ onLock }) {
  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
  <div>
  <p className="text-slate-400 leading-relaxed text-[13px] font-sans font-medium mb-4">
- Upload the problem statements CSV to S3 (<code className="text-amber-400 text-[11px] font-mono">problemstatements/problems.csv</code>).
- This unlocks the Selection Gate toggle. The CSV must have 4 columns: <code className="text-amber-300 font-mono text-[11px]">title, description, requirements, expectations</code>.
+ Upload the problem statements CSV to S3 (<code className="text-[#00FFFF] text-[11px] font-mono">problemstatements/problems.csv</code>).
+ This unlocks the Selection Gate toggle. The CSV must have 4 columns: <code className="text-[#00FFFF]/90 font-mono text-[11px]">title, description, requirements, expectations</code>.
  </p>
 
- <div className="p-4 bg-black/40 border border-amber-500/15 rounded-xl hover:border-amber-500/35 transition">
+ <div className="p-4 bg-black/40 border border-blue-500/15 rounded-xl hover:border-blue-500/35 transition">
  <div className="flex items-center justify-between mb-3">
  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Problem Statements CSV</span>
  {uploadingProblemsCSV && (
- <span className="text-[10px] text-amber-400 font-mono animate-pulse">Uploading to S3...</span>
+ <span className="text-[10px] text-[#00FFFF] font-mono animate-pulse">Uploading to S3...</span>
  )}
  </div>
  <label className={`block cursor-pointer text-center py-3 px-4 rounded-xl border font-bold uppercase text-[10px] tracking-wider transition-all ${uploadingProblemsCSV
  ? 'bg-zinc-900 border-white/5 text-slate-600 cursor-not-allowed'
  : problemsCsvUploaded
- ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-400 hover:bg-emerald-500/20'
- : 'bg-amber-500/10 border-amber-500/25 text-amber-400 hover:bg-amber-500/20'
+ ? 'bg-cyan-500/10 border-cyan-500/25 text-cyan-400 hover:bg-cyan-500/20'
+ : 'bg-blue-500/10 border-blue-500/25 text-[#00FFFF] hover:bg-blue-500/20'
  }`}>
  <span className="flex items-center justify-center gap-2">
  <UploadCloud className="w-4 h-4" />
@@ -1547,16 +1543,16 @@ export default function AdminDashboard({ onLock }) {
  { step: '03', label: 'Launch Countdown Timer', done: timerLaunched },
  ].map(({ step, label, done }) => (
  <div key={step} className={`flex items-center gap-3 p-3 rounded-xl border transition-all ${done
- ? 'bg-emerald-500/5 border-emerald-500/20'
+ ? 'bg-cyan-500/5 border-cyan-500/20'
  : 'bg-zinc-950/60 border-zinc-800'
  }`}>
  <span className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-extrabold font-mono border ${done
- ? 'bg-emerald-500 border-emerald-400 text-black'
+ ? 'bg-cyan-500 border-cyan-400 text-black'
  : 'bg-zinc-900 border-zinc-700 text-slate-500'
  }`}>
  {done ? '✓' : step}
  </span>
- <span className={`text-xs font-mono ${done ? 'text-emerald-400' : 'text-slate-500'
+ <span className={`text-xs font-mono ${done ? 'text-cyan-400' : 'text-slate-500'
  }`}>{label}</span>
  </div>
  ))}
@@ -1598,8 +1594,8 @@ export default function AdminDashboard({ onLock }) {
  )}
 
  {importMessage && (
- <div className="mb-6 p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-xs flex items-center gap-2.5 font-sans">
- <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0" />
+ <div className="mb-6 p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400 text-xs flex items-center gap-2.5 font-sans">
+ <CheckCircle className="w-5 h-5 text-cyan-400 shrink-0" />
  <span>{importMessage}</span>
  </div>
  )}
@@ -1697,7 +1693,7 @@ export default function AdminDashboard({ onLock }) {
  )}
 
  {uploadingCsv && (
- <div className="flex gap-2 text-yellow-500 animate-pulse">
+ <div className="flex gap-2 text-[#00FFFF] animate-pulse">
  <span>&gt;</span>
  <span>Synchronizing payload packets with AWS DynamoDB...</span>
  </div>
@@ -1715,7 +1711,7 @@ export default function AdminDashboard({ onLock }) {
 
  {/* 📋 TEAMS & PROBLEM SELECTIONS OVERVIEW */}
  {showTeamsSection && (
- <section className="bg-zinc-950 border-2 border-emerald-500/50 rounded-sm p-6 shadow-xl text-left relative overflow-hidden">
+ <section className="bg-zinc-950 border-2 border-cyan-500/50 rounded-sm p-6 shadow-xl text-left relative overflow-hidden">
  <div className="flex justify-between items-center mb-6 pb-3 border-b border-white/5">
  <h2 className="text-md font-bold text-slate-200 uppercase tracking-wider">Active Problem Selections</h2>
  <div className="flex items-center gap-3">
@@ -1735,7 +1731,7 @@ export default function AdminDashboard({ onLock }) {
  >
  Revoke All Selections
  </button>
- <span className="text-[10px] font-mono text-[#308a4f] bg-[#308a4f]/10 px-2 py-1 rounded border border-[#308a4f]/25 uppercase animate-pulse">Live Sync</span>
+ <span className="text-[10px] font-mono text-[#00FFFF] bg-[#00FFFF]/10 px-2 py-1 rounded border border-[#00FFFF]/25 uppercase animate-pulse">Live Sync</span>
  </div>
  </div>
 
@@ -1770,16 +1766,16 @@ export default function AdminDashboard({ onLock }) {
  </td>
  <td className="py-3.5 px-4">
  {problem ? (
- <span className="text-[#308a4f] font-mono-custom font-bold uppercase">{problem}</span>
+ <span className="text-[#00FFFF] font-mono-custom font-bold uppercase">{problem}</span>
  ) : (
  <span className="text-slate-500 font-mono-custom italic">Awaiting selection...</span>
  )}
  </td>
  <td className="py-3.5 px-4 text-left">
  {problem ? (
- <span className="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-[#308a4f]/10 text-[#308a4f] border border-[#308a4f]/20 uppercase">Locked</span>
+ <span className="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-[#00FFFF]/10 text-[#00FFFF] border border-[#00FFFF]/20 uppercase">Locked</span>
  ) : (
- <span className="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 uppercase">Pending</span>
+ <span className="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold bg-blue-500/10 text-[#00FFFF] border border-blue-500/20 uppercase">Pending</span>
  )}
  </td>
  </tr>
@@ -1871,7 +1867,7 @@ export default function AdminDashboard({ onLock }) {
  </td>
  </tr>
  ) : (
- certRows.map(({ teamId, memberName, s3Key, idx, team }) => {
+ certRows.map(({ teamId, memberName, s3Key, idx }) => {
  const filename = s3Key.substring(s3Key.lastIndexOf('/') + 1);
  return (
  <tr key={`${teamId}-${memberName}-${idx}`} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
@@ -1916,15 +1912,15 @@ export default function AdminDashboard({ onLock }) {
   {/* ─────────────────────────────────────────── */}
   {/* 🔗 GITHUB REPO LINKS SECTION */}
   {/* ─────────────────────────────────────────── */}
-  <section className="bg-zinc-950 border-2 border-emerald-500/50 rounded-sm p-6 shadow-xl text-left relative overflow-hidden">
+  <section className="bg-zinc-950 border-2 border-cyan-500/50 rounded-sm p-6 shadow-xl text-left relative overflow-hidden">
     <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
-      <GitBranch className="w-40 h-40 text-emerald-400" />
+      <GitBranch className="w-40 h-40 text-cyan-400" />
     </div>
 
     {/* Header */}
     <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 pb-3 border-b border-white/5 relative z-10 gap-4">
       <div>
-        <h2 className="text-md font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
+        <h2 className="text-md font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
           <GitBranch className="w-5 h-5" />
           GitHub Repo Links
         </h2>
@@ -1936,7 +1932,7 @@ export default function AdminDashboard({ onLock }) {
         <button
           onClick={downloadRepoLinksCSV}
           disabled={getRepoLinks().length === 0}
-          className="flex items-center gap-1.5 text-[11px] font-bold text-emerald-400 hover:text-black bg-emerald-500/10 hover:bg-emerald-400 border border-emerald-500/30 hover:border-emerald-400 px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed"
+          className="flex items-center gap-1.5 text-[11px] font-bold text-cyan-400 hover:text-black bg-cyan-500/10 hover:bg-cyan-400 border border-cyan-500/30 hover:border-cyan-400 px-4 py-2 rounded-xl transition-all duration-300 cursor-pointer uppercase tracking-wider disabled:opacity-40 disabled:cursor-not-allowed"
         >
           <Download className="w-3.5 h-3.5" />
           Download CSV
@@ -1970,7 +1966,7 @@ export default function AdminDashboard({ onLock }) {
           <tbody>
             {getRepoLinks().map((team, idx) => (
               <tr key={team.TeamID}
-                className="border-b border-white/5 hover:bg-emerald-500/5 transition-colors group"
+                className="border-b border-white/5 hover:bg-cyan-500/5 transition-colors group"
               >
                 <td className="py-3.5 pr-4 text-xs font-mono text-slate-500 font-bold">{String(idx + 1).padStart(2, '0')}</td>
                 <td className="py-3.5 pr-4">
@@ -1983,7 +1979,7 @@ export default function AdminDashboard({ onLock }) {
                     href={team.DeployedLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-emerald-400 hover:text-emerald-300 font-mono text-xs flex items-center gap-1.5 group-hover:underline break-all"
+                    className="text-cyan-400 hover:text-cyan-300 font-mono text-xs flex items-center gap-1.5 group-hover:underline break-all"
                   >
                     <Link2 className="w-3.5 h-3.5 shrink-0" />
                     {team.DeployedLink}
@@ -2114,8 +2110,8 @@ export default function AdminDashboard({ onLock }) {
  )}
 
  {certDeleteSuccess && (
- <div className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-xs flex items-center gap-2 font-sans">
- <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+ <div className="mb-4 p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400 text-xs flex items-center gap-2 font-sans">
+ <CheckCircle className="w-4 h-4 text-cyan-400 shrink-0" />
  <span>{certDeleteSuccess}</span>
  </div>
  )}
@@ -2206,8 +2202,8 @@ export default function AdminDashboard({ onLock }) {
  )}
 
  {purgeCertsSuccess && (
- <div className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-xs flex items-center gap-2 font-sans">
- <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+ <div className="mb-4 p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400 text-xs flex items-center gap-2 font-sans">
+ <CheckCircle className="w-4 h-4 text-cyan-400 shrink-0" />
  <span>{purgeCertsSuccess}</span>
  </div>
  )}
@@ -2295,8 +2291,8 @@ export default function AdminDashboard({ onLock }) {
  )}
 
  {deleteMessage && (
- <div className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-400 text-xs flex items-center gap-2 font-sans">
- <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+ <div className="mb-4 p-3 bg-cyan-500/10 border border-cyan-500/20 rounded-xl text-cyan-400 text-xs flex items-center gap-2 font-sans">
+ <CheckCircle className="w-4 h-4 text-cyan-400 shrink-0" />
  <span>{deleteMessage}</span>
  </div>
  )}
@@ -2379,19 +2375,19 @@ export default function AdminDashboard({ onLock }) {
  : '—';
 
  const starBadgeColor = (r) => {
- if (r >= 4) return 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400';
- if (r === 3) return 'bg-amber-500/15 border-amber-500/30 text-amber-400';
+ if (r >= 4) return 'bg-cyan-500/15 border-cyan-500/30 text-cyan-400';
+ if (r === 3) return 'bg-blue-500/15 border-blue-500/30 text-[#00FFFF]';
  return 'bg-rose-500/15 border-rose-500/30 text-rose-400';
  };
 
  return (
  <div className="fixed inset-0 z-[70] flex items-start justify-center p-4 overflow-y-auto bg-black/90 ">
- <div className="relative w-full max-w-5xl my-6 bg-[#0a0b0e] border border-yellow-500/25 rounded-2xl shadow-[0_0_60px_rgba(234,179,8,0.08)] overflow-hidden">
+ <div className="relative w-full max-w-5xl my-6 bg-[#0a0b0e] border border-blue-500/25 rounded-2xl shadow-[0_0_60px_rgba(0,255,255,0.08)] overflow-hidden">
 
  {/* Modal Header */}
  <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 bg-[#0c0d10] border-b border-white/5">
  <div>
- <h2 className="text-sm font-bold text-yellow-400 uppercase tracking-wider flex items-center gap-2">
+ <h2 className="text-sm font-bold text-[#00FFFF] uppercase tracking-wider flex items-center gap-2">
  <MessageSquare className="w-4 h-4" />
  All Participant Feedbacks
  </h2>
@@ -2430,7 +2426,7 @@ export default function AdminDashboard({ onLock }) {
  return (
  <div
  key={key}
- className="bg-white/[0.03] border border-white/8 rounded-xl overflow-hidden transition-all duration-300 hover:border-yellow-500/20"
+ className="bg-white/[0.03] border border-white/8 rounded-xl overflow-hidden transition-all duration-300 hover:border-blue-500/20"
  >
  {/* Card Header — always visible */}
  <button
@@ -2444,7 +2440,7 @@ export default function AdminDashboard({ onLock }) {
  </span>
  {/* Member Info */}
  <div className="text-left">
- <p className="text-sm font-bold text-white font-mono-custom group-hover:text-yellow-400 transition-colors">
+ <p className="text-sm font-bold text-white font-mono-custom group-hover:text-[#00FFFF] transition-colors">
  {fb.memberName}
  </p>
  <div className="flex items-center gap-2 mt-0.5 flex-wrap">
@@ -2484,7 +2480,7 @@ export default function AdminDashboard({ onLock }) {
  <Star
  key={s}
  className={`w-5 h-5 ${s <= fb.Rating
- ? 'text-yellow-400 fill-yellow-400 drop-shadow-[0_0_3px_rgba(250,204,21,0.4)]'
+ ? 'text-[#00FFFF] fill-blue-400 drop-shadow-[0_0_3px_rgba(0,255,255,0.4)]'
  : 'text-zinc-700 fill-zinc-800'
  }`}
  />

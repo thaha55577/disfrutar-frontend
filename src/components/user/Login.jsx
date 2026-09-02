@@ -37,8 +37,8 @@ export default function Login({ onLoginSuccess }) {
         <div className="relative w-full min-h-[100dvh] flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-hidden bg-[#030712]">
             
             {/* Ambient Multi-spectral Cyber Lighting */}
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] max-w-[650px] max-h-[650px] bg-gradient-to-tr from-[#00FF66]/20 via-[#00F0FF]/15 to-[#FFD700]/10 rounded-full blur-[140px] pointer-events-none" />
-            <div className="absolute bottom-10 right-10 w-[40vw] h-[40vw] max-w-[400px] max-h-[400px] bg-[#00FF66]/10 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] max-w-[650px] max-h-[650px] bg-gradient-to-tr from-[#3B82F6]/20 via-[#00F0FF]/15 to-[#FFD700]/10 rounded-full blur-[140px] pointer-events-none" />
+            <div className="absolute bottom-10 right-10 w-[40vw] h-[40vw] max-w-[400px] max-h-[400px] bg-[#3B82F6]/10 rounded-full blur-[120px] pointer-events-none" />
             
             {/* Perspective Grid Background Overlay */}
             <div 
@@ -70,16 +70,16 @@ export default function Login({ onLoginSuccess }) {
                 </div>
 
                 {/* Main Glassmorphic Login Terminal */}
-                <div className="relative rounded-3xl bg-black/75 border border-white/15 p-7 sm:p-10 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(0,255,102,0.1)] overflow-hidden">
+                <div className="relative rounded-3xl bg-black/75 border border-white/15 p-7 sm:p-10 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(0,255,255,0.1)] overflow-hidden">
                     
                     {/* Top Radiant Laser Line */}
-                    <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#00FF66] to-transparent shadow-[0_0_15px_#00FF66]" />
+                    <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent shadow-[0_0_15px_#3B82F6]" />
 
                     {/* Corner Tech Brackets */}
-                    <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-[#00FF66]/60 pointer-events-none" />
-                    <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-[#00FF66]/60 pointer-events-none" />
-                    <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-[#00FF66]/60 pointer-events-none" />
-                    <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-[#00FF66]/60 pointer-events-none" />
+                    <div className="absolute top-3 left-3 w-3 h-3 border-t-2 border-l-2 border-[#3B82F6]/60 pointer-events-none" />
+                    <div className="absolute top-3 right-3 w-3 h-3 border-t-2 border-r-2 border-[#3B82F6]/60 pointer-events-none" />
+                    <div className="absolute bottom-3 left-3 w-3 h-3 border-b-2 border-l-2 border-[#3B82F6]/60 pointer-events-none" />
+                    <div className="absolute bottom-3 right-3 w-3 h-3 border-b-2 border-r-2 border-[#3B82F6]/60 pointer-events-none" />
 
                     {/* Logo & Headline */}
                     <div className="text-center mb-8">
@@ -111,7 +111,7 @@ export default function Login({ onLoginSuccess }) {
                                 htmlFor="team-id" 
                                 className="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-2 font-mono-custom flex items-center justify-between"
                             >
-                                <span className="flex items-center gap-1.5 text-emerald-400">
+                                <span className="flex items-center gap-1.5 text-cyan-400">
                                     <Terminal className="w-3.5 h-3.5" />
                                     <span>Team Identity (Team ID)</span>
                                 </span>
@@ -127,7 +127,7 @@ export default function Login({ onLoginSuccess }) {
                                     disabled={isLoading}
                                     required
                                     autoFocus
-                                    className="w-full px-4 py-3.5 bg-black/60 border border-white/10 hover:border-[#00FF66]/40 focus:border-[#00FF66] rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-[#00FF66]/20 font-mono-custom text-sm transition-all duration-200 shadow-inner"
+                                    className="w-full px-4 py-3.5 bg-black/60 border border-white/10 hover:border-[#3B82F6]/40 focus:border-[#3B82F6] rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-[#3B82F6]/20 font-mono-custom text-sm transition-all duration-200 shadow-inner"
                                 />
                             </div>
                         </div>
@@ -138,7 +138,7 @@ export default function Login({ onLoginSuccess }) {
                                 htmlFor="password" 
                                 className="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-2 font-mono-custom flex items-center justify-between"
                             >
-                                <span className="flex items-center gap-1.5 text-yellow-400">
+                                <span className="flex items-center gap-1.5 text-[#00FFFF]">
                                     <Lock className="w-3.5 h-3.5" />
                                     <span>Access Passcode</span>
                                 </span>
@@ -153,7 +153,7 @@ export default function Login({ onLoginSuccess }) {
                                     placeholder="••••••••••••"
                                     disabled={isLoading}
                                     required
-                                    className="w-full px-4 py-3.5 bg-black/60 border border-white/10 hover:border-yellow-400/40 focus:border-yellow-400 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-yellow-400/20 font-mono-custom text-sm transition-all duration-200 shadow-inner tracking-widest"
+                                    className="w-full px-4 py-3.5 bg-black/60 border border-white/10 hover:border-blue-400/40 focus:border-blue-400 rounded-xl text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-400/20 font-mono-custom text-sm transition-all duration-200 shadow-inner tracking-widest"
                                 />
                             </div>
                         </div>
@@ -163,7 +163,7 @@ export default function Login({ onLoginSuccess }) {
                             type="submit"
                             disabled={isLoading}
                             id="login-submit-btn"
-                            className="group relative w-full py-4 px-6 rounded-xl font-orbitron font-extrabold text-sm uppercase tracking-widest text-black bg-gradient-to-r from-[#00FF66] via-[#00F0FF] to-[#00FF66] bg-[length:200%_auto] hover:bg-[position:right_center] transition-all duration-500 cursor-pointer shadow-[0_0_25px_rgba(0,255,102,0.4)] hover:shadow-[0_0_40px_rgba(0,255,102,0.7)] hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                            className="group relative w-full py-4 px-6 rounded-xl font-orbitron font-extrabold text-sm uppercase tracking-widest text-black bg-gradient-to-r from-[#3B82F6] via-[#00F0FF] to-[#3B82F6] bg-[length:200%_auto] hover:bg-[position:right_center] transition-all duration-500 cursor-pointer shadow-[0_0_25px_rgba(0,255,255,0.4)] hover:shadow-[0_0_40px_rgba(0,255,255,0.7)] hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed mt-2"
                         >
                             {isLoading ? (
                                 <div className="flex items-center gap-2.5">
@@ -182,8 +182,8 @@ export default function Login({ onLoginSuccess }) {
 
                     {/* Bottom Status Info & Admin Quick Link */}
                     <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between text-[10px] font-mono-custom text-slate-500">
-                        <span className="flex items-center gap-1 text-emerald-400/90 font-medium">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                        <span className="flex items-center gap-1 text-cyan-400/90 font-medium">
+                            <CheckCircle2 className="w-3 h-3 text-cyan-400" />
                             <span>System Online</span>
                         </span>
                         <a 

@@ -19,8 +19,8 @@ import { API_BASE_URL } from './utils/api';
 
 const LoadingFallback = () => (
   <div className="h-screen w-screen flex flex-col items-center justify-center bg-[#010c18]">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#00FF66]"></div>
-    <p className="mt-4 text-[#00FF66] font-mono tracking-widest text-sm uppercase">Optimizing Sequence...</p>
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#3B82F6]"></div>
+    <p className="mt-4 text-[#3B82F6] font-mono tracking-widest text-sm uppercase">Optimizing Sequence...</p>
   </div>
 );
 
@@ -263,7 +263,7 @@ export default function App() {
       <React.Suspense fallback={<LoadingFallback />}>
         <Routes>
           <Route path="/" element={<GeneralUserFlow />} />
-          <Route path="/admingfg" element={<AdminGateway />} />
+          <Route path="/adminacm" element={<AdminGateway />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </React.Suspense>

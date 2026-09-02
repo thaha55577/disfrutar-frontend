@@ -44,9 +44,9 @@ const cardV = {
 // ─── Shared Glass Panel ───────────────────────────────────────────────────────
 const GlassPanel = memo(({ children, className = '', neonColor = 'white', ...props }) => {
  const borders = {
- green: 'border-[#00FF66]/50 shadow-[0_0_25px_rgba(0,255,102,0.15)]',
+ green: 'border-[#3B82F6]/50 shadow-[0_0_25px_rgba(0,255,255,0.15)]',
  cyan: 'border-cyan-500/50 shadow-[0_0_25px_rgba(6,182,212,0.15)]',
- yellow: 'border-yellow-500/50 shadow-[0_0_25px_rgba(234,179,8,0.15)]',
+ yellow: 'border-blue-500/50 shadow-[0_0_25px_rgba(0,255,255,0.15)]',
  white: 'border-white/30',
  rose: 'border-rose-500/50 shadow-[0_0_25px_rgba(244,63,94,0.15)]',
  };
@@ -170,9 +170,9 @@ const DEFAULT_PROBLEMS = [
 // ─── Badge ────────────────────────────────────────────────────────────────────
 const Badge = memo(({ children, color = 'green', pulse = false, className = '' }) => {
  const v = {
- green: 'bg-[#00FF66]/15 border-[#00FF66]/30 text-[#00FF66]',
+ green: 'bg-[#3B82F6]/15 border-[#3B82F6]/30 text-[#00FFFF]',
  cyan: 'bg-cyan-500/10 border-cyan-500/25 text-cyan-400',
- yellow: 'bg-yellow-500/10 border-yellow-500/25 text-yellow-400',
+ yellow: 'bg-blue-500/10 border-blue-500/25 text-[#00FFFF]',
  rose: 'bg-rose-500/10 border-rose-500/25 text-rose-400',
  slate: 'bg-slate-900/80 border-zinc-800 text-slate-400',
  };
@@ -184,11 +184,11 @@ const Badge = memo(({ children, color = 'green', pulse = false, className = '' }
 });
 
 // ─── Section Header ───────────────────────────────────────────────────────────
-const SectionHeader = memo(({ icon: Icon, iconColor = 'text-[#00FF66]', children, rightSlot, index }) => (
+const SectionHeader = memo(({ icon: Icon, iconColor = 'text-[#00FFFF]', children, rightSlot, index }) => (
  <div className="flex items-center justify-between mb-5 pb-3 border-b border-white/[0.06]">
  <h3 className="text-xs font-bold text-white uppercase tracking-widest font-mono flex items-center gap-2">
  <Icon className={`w-4 h-4 ${iconColor}`} />
- {index && <span className="text-[#00FF66]/60">[{String(index).padStart(2, '0')}]</span>}
+ {index && <span className="text-[#00FFFF]/60">[{String(index).padStart(2, '0')}]</span>}
  <span>{children}</span>
  </h3>
  {rightSlot}
@@ -197,16 +197,16 @@ const SectionHeader = memo(({ icon: Icon, iconColor = 'text-[#00FF66]', children
 
 // ─── Spinner ──────────────────────────────────────────────────────────────────
 const Spinner = () => (
- <div className="py-16 flex flex-col items-center justify-center gap-4 text-emerald-400">
+ <div className="py-16 flex flex-col items-center justify-center gap-4 text-cyan-400">
  <div className="relative flex items-center justify-center w-12 h-12">
  <motion.div
- className="absolute inset-0 border-2 border-[#00FF66] rounded-full mix-blend-screen"
+ className="absolute inset-0 border-2 border-[#3B82F6] rounded-full mix-blend-screen"
  animate={{ scale: [1, 1.5, 2], opacity: [0.8, 0.4, 0] }}
  transition={{ repeat: Infinity, duration: 1.5, ease: 'easeOut' }}
  />
- <div className="w-4 h-4 bg-[#00FF66] rounded-full shadow-[0_0_15px_rgba(0,255,102,0.8)]" />
+ <div className="w-4 h-4 bg-[#3B82F6] rounded-full shadow-[0_0_15px_rgba(0,255,255,0.8)]" />
  </div>
- <p className="text-xs font-mono uppercase tracking-widest animate-pulse text-[#00FF66]">
+ <p className="text-xs font-mono uppercase tracking-widest animate-pulse text-[#00FFFF]">
  Decrypting Challenge Matrix...
  </p>
  </div>
@@ -365,6 +365,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  }
  };
  loadProblemData();
+ // eslint-disable-next-line react-hooks/exhaustive-deps
  }, []);
 
  useEffect(() => {
@@ -379,6 +380,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
 
  pollLoop();
  return () => clearTimeout(pollTimeout);
+ // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [problemsList]);
 
  useEffect(() => {
@@ -441,34 +443,13 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  } finally { setSubmittingLink(false); }
  };
 
- const handleFileUpload = async (memberName, file) => {
- if (!file) return;
- if (file.type !== 'application/pdf') { setUploadErrors(p => ({ ...p, [memberName]: 'Invalid format. Only PDF files are allowed.' })); return; }
- if (file.size > 5 * 1024 * 1024) { setUploadErrors(p => ({ ...p, [memberName]: 'File is too large. Maximum size is 5 MB.' })); return; }
- setUploadErrors(p => ({ ...p, [memberName]: null }));
- setUploadingMember(memberName);
- try {
- const response = await fetch(`${API_BASE_URL}/api/certificates/generate-upload-url`, {
- method: 'POST', headers: { 'Content-Type': 'application/json' },
- body: JSON.stringify({ team_id: teamId, member_name: memberName, file_name: file.name, cert_type: 'Data Analytics Essentials' }),
- });
- if (!response.ok) throw new Error('Failed to generate presigned upload URL.');
- const { presigned_url } = await response.json();
- const s3Response = await fetch(presigned_url, { method: 'PUT', headers: { 'Content-Type': 'application/pdf' }, body: file });
- if (!s3Response.ok) throw new Error('S3 Upload Failed.');
- await fetchTeamDetails();
- } catch (err) {
- setUploadErrors(p => ({ ...p, [memberName]: err.message || 'Failed to complete upload request.' }));
- } finally { setUploadingMember(null); }
- };
-
  // ── Metadata Helpers ─────────────────────────────────────────────────────
  const getDifficulty = (idx) => {
  const labels = ['Hard', 'Medium', 'Hard', 'Medium', 'Insane'];
  const label = labels[idx] ?? 'Insane';
  const colors = {
  Hard: 'text-rose-400 bg-rose-500/10 border-rose-500/25',
- Medium: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/25',
+ Medium: 'text-[#00FFFF] bg-blue-500/10 border-blue-500/25',
  Insane: 'text-red-400 bg-red-500/10 border-red-500/25',
  };
  return { label, color: colors[label] };
@@ -499,24 +480,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
 
  const activeProb = activeSelectedProblem || selectedProblem;
  const si = (problemsList.length > 0 ? problemsList : DEFAULT_PROBLEMS).findIndex(p => p.title === activeProb?.title);
- const selectedDifficulty = getDifficulty(si !== -1 ? si : 0);
- const selectedPoints = getPoints(si !== -1 ? si : 0);
- const selectedCategory = getCategory(si !== -1 ? si : 0);
- const selectedEntrypoint = getEntrypoint(si !== -1 ? si : 0);
- const selectedVector = getVector(si !== -1 ? si : 0);
- const selectedSeed = getSeed(si !== -1 ? si : 0);
-
- const getRoadmapPhases = () => {
- const isSubmitted = !!teamData?.DeployedLink;
- const reviewStatus = teamData?.EvaluationStatus || 'Pending Review';
- return [
- { name: 'Challenge Selected', desc: selectedProblem?.title || 'None Selected', status: selectedProblem ? 'completed' : 'pending' },
- { name: 'Review 1: Strategy', desc: 'Architecture & schemas evaluation.', status: reviewStatus !== 'Pending Review' ? 'completed' : 'current' },
- { name: 'Review 2: Prototype', desc: 'Functional APIs & network sync check.', status: reviewStatus === 'Approved' ? 'completed' : 'pending' },
- { name: 'Final Review: Demo', desc: 'Product demonstrations & benchmarks.', status: reviewStatus === 'Approved' ? 'completed' : 'pending' },
- { name: 'Submit GitHub Repo Link', desc: isSubmitted ? 'Repository link submitted' : 'Awaiting GitHub repository URL', status: isSubmitted ? 'completed' : 'current' },
- ];
- };
+ 
 
  // ── Render ────────────────────────────────────────────────────────────────
  return (
@@ -536,7 +500,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.94 }}
             transition={{ duration: 0.15 }}
-            className="group flex items-center justify-center p-2 rounded-lg border border-zinc-800 hover:border-[#00FF66]/60 bg-white/[0.03] text-slate-400 hover:text-[#00FF66] transition-colors cursor-pointer"
+            className="group flex items-center justify-center p-2 rounded-lg border border-zinc-800 hover:border-[#3B82F6]/60 bg-white/[0.03] text-slate-400 hover:text-[#00FFFF] transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
           </motion.button>
@@ -545,7 +509,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
 
           <div className="flex flex-col gap-1">
             <DsfrutarLogo inline className="text-lg" showSub={false} />
-            <span className="text-[10px] text-[#00FF66]/80 font-mono tracking-widest uppercase leading-none mt-0.5">DSFRUTAR-2K26 WORKSPACE</span>
+            <span className="text-[10px] text-[#00FFFF]/80 font-mono tracking-widest uppercase leading-none mt-0.5">DSFRUTAR-2K26 WORKSPACE</span>
           </div>
 
  <Badge color="green" className="hidden sm:inline-flex">Broadcasting Active</Badge>
@@ -553,8 +517,8 @@ export default function ProblemDashboard({ onLogout, onBack }) {
 
  <div className="flex items-center gap-4">
  <div className="hidden md:flex flex-col text-right text-[11px] text-slate-500">
- <span>TEAM_REF: <span className="text-[#00FF66] font-bold">{teamId}</span></span>
- <span>SECURE_SHELL: <span className="text-emerald-400">ACTIVE</span></span>
+ <span>TEAM_REF: <span className="text-[#00FFFF] font-bold">{teamId}</span></span>
+ <span>SECURE_SHELL: <span className="text-cyan-400">ACTIVE</span></span>
  </div>
 
  <motion.button
@@ -582,24 +546,24 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  className="w-full text-left"
  >
  <div className="flex items-center justify-between mb-6 border-b border-white/[0.06] pb-4">
- <h2 className="text-sm font-bold text-[#00FF66] uppercase tracking-widest flex items-center gap-2 font-mono">
+ <h2 className="text-sm font-bold text-[#00FFFF] uppercase tracking-widest flex items-center gap-2 font-mono">
  <BookOpen className="w-4 h-4" />
  Select Your Hackathon Challenge Statement
  </h2>
  <motion.button
  onClick={onBack}
  whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
- className="text-xs text-slate-400 hover:text-yellow-400 border border-zinc-800 hover:border-yellow-400/50 bg-white/[0.02] px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer font-sans font-semibold lab-btn-ripple"
+ className="text-xs text-slate-400 hover:text-[#00FFFF] border border-zinc-800 hover:border-blue-400/50 bg-white/[0.02] px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer font-sans font-semibold lab-btn-ripple"
  >
  <ArrowLeft className="w-3.5 h-3.5" />
  Return to Mainboard
  </motion.button>
  </div>
 
- <motion.div variants={fadeUp} className="mb-6 p-4 bg-yellow-500/[0.05] border border-yellow-500/20 rounded-2xl text-xs leading-relaxed text-slate-400 font-sans font-medium flex items-start gap-3">
- <AlertTriangle className="w-4 h-4 text-yellow-500 shrink-0 mt-0.5" />
+ <motion.div variants={fadeUp} className="mb-6 p-4 bg-blue-500/[0.05] border border-blue-500/20 rounded-2xl text-xs leading-relaxed text-slate-400 font-sans font-medium flex items-start gap-3">
+ <AlertTriangle className="w-4 h-4 text-[#00FFFF] shrink-0 mt-0.5" />
  <div>
- <span className="font-extrabold text-yellow-500 uppercase block tracking-wider mb-0.5 text-xs">CAPACITY GUARDRAILS IN EFFECT</span>
+ <span className="font-extrabold text-[#00FFFF] uppercase block tracking-wider mb-0.5 text-xs">CAPACITY GUARDRAILS IN EFFECT</span>
  Each challenge track is capped at a maximum of <strong>3 teams</strong>. Once a track reaches 3 teams, it locks automatically. Choose carefully — problem statement selections are irreversible once locked.
  </div>
  </motion.div>
@@ -643,24 +607,24 @@ export default function ProblemDashboard({ onLogout, onBack }) {
   key={idx}
   variants={cardV}
   layout
-  className="group relative rounded-xl cursor-pointer glass-capsule flex flex-col justify-between problem-card-hover overflow-hidden border border-white/10 bg-black/40 hover:border-[#00FF66]/40 transition-all p-6"
+  className="group relative rounded-xl cursor-pointer glass-capsule flex flex-col justify-between problem-card-hover overflow-hidden border border-white/10 bg-black/40 hover:border-[#3B82F6]/40 transition-all p-6"
   >
-  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#00FF66]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-  <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5 group-hover:ring-[#00FF66]/20 transition-all duration-300" />
+  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-[#3B82F6]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+  <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/5 group-hover:ring-[#3B82F6]/20 transition-all duration-300" />
 
   <div className="flex flex-col gap-4">
   <div className="flex items-center justify-between border-b border-white/[0.08] pb-3">
-  <span className="text-[#00FF66] font-mono text-xs uppercase font-bold tracking-widest flex items-center gap-1.5">
+  <span className="text-[#00FFFF] font-mono text-xs uppercase font-bold tracking-widest flex items-center gap-1.5">
   <BookOpen className="w-4 h-4" />
   Problem Statement {problemNumber}
   </span>
-  <span className={`text-[10px] px-2 py-0.5 rounded font-mono uppercase tracking-wider border ${count === 2 ? 'bg-yellow-500/10 border-yellow-500/20 text-yellow-400 font-bold' : 'bg-[#00FF66]/10 border-[#00FF66]/20 text-[#00FF66]'}`}>
+  <span className={`text-[10px] px-2 py-0.5 rounded font-mono uppercase tracking-wider border ${count === 2 ? 'bg-blue-500/10 border-blue-500/20 text-[#00FFFF] font-bold' : 'bg-[#3B82F6]/10 border-[#3B82F6]/20 text-[#00FFFF]'}`}>
   {count}/3 Slots Claimed
   </span>
   </div>
 
   <div className="py-6 flex flex-col items-center justify-center text-center gap-3">
-  <div className="w-16 h-16 rounded-2xl bg-[#00FF66]/10 border border-[#00FF66]/20 flex items-center justify-center text-2xl font-extrabold font-orbitron text-[#00FF66] shadow-[0_0_20px_rgba(0,255,102,0.15)] group-hover:scale-105 transition-transform">
+  <div className="w-16 h-16 rounded-2xl bg-[#3B82F6]/10 border border-[#3B82F6]/20 flex items-center justify-center text-2xl font-extrabold font-orbitron text-[#00FFFF] shadow-[0_0_20px_rgba(0,255,255,0.15)] group-hover:scale-105 transition-transform">
   #{problemNumber}
   </div>
   <h3 className="text-base font-extrabold text-white font-orbitron uppercase tracking-wide">
@@ -675,7 +639,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
   <div className="pt-4 border-t border-white/[0.05]">
   <motion.button
   onClick={() => setConfirmSelectionProb(prob)}
-  className="w-full font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 font-sans text-xs uppercase tracking-widest bg-[#00FF66] text-slate-950 hover:bg-yellow-400 cursor-pointer shadow-[0_0_15px_rgba(0,255,102,0.2)] hover:shadow-[0_0_20px_rgba(250,204,21,0.5)] lab-btn-ripple relative z-10"
+  className="w-full font-bold py-2.5 px-4 rounded-xl transition-all flex items-center justify-center gap-2 font-sans text-xs uppercase tracking-widest bg-[#3B82F6] text-slate-950 hover:bg-blue-400 cursor-pointer shadow-[0_0_15px_rgba(0,255,255,0.2)] hover:shadow-[0_0_20px_rgba(0,255,255,0.5)] lab-btn-ripple relative z-10"
   >
   <Lock className="w-3.5 h-3.5" />
   Select Problem Statement {problemNumber}
@@ -703,9 +667,9 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  <motion.div variants={cardV}>
  <GlassPanel neonColor="green" className="p-6 md:p-8">
  <div className="absolute top-4 right-4 opacity-[0.04] pointer-events-none">
- <BookOpen className="w-32 h-32 text-yellow-400" />
+ <BookOpen className="w-32 h-32 text-[#00FFFF]" />
  </div>
- <SectionHeader icon={BookOpen} iconColor="text-yellow-400" index={1} rightSlot={<Badge color="green" pulse>Locked Track</Badge>}>
+ <SectionHeader icon={BookOpen} iconColor="text-[#00FFFF]" index={1} rightSlot={<Badge color="green" pulse>Locked Track</Badge>}>
  Selected Challenge Track
  </SectionHeader>
 
@@ -715,13 +679,13 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/[0.05]">
  {activeProb?.requirements && (
  <div>
- <h3 className="text-sm font-bold text-yellow-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+ <h3 className="text-sm font-bold text-[#00FFFF] uppercase tracking-wider mb-2 flex items-center gap-1.5">
  <ListChecks className="w-4 h-4" />Execution Requirements
  </h3>
  <ul className="space-y-2 text-sm text-slate-400 leading-relaxed font-sans font-medium">
  {activeProb.requirements.split('\n').filter(Boolean).map((req, i) => (
  <li key={i} className="flex gap-2 items-start">
- <span className="text-yellow-400 font-mono font-bold mt-0.5 shrink-0">•</span><span>{req.trim()}</span>
+ <span className="text-[#00FFFF] font-mono font-bold mt-0.5 shrink-0">•</span><span>{req.trim()}</span>
  </li>
  ))}
  </ul>
@@ -729,13 +693,13 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  )}
  {activeProb?.expectations && (
  <div>
- <h3 className="text-sm font-bold text-[#00FF66] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+ <h3 className="text-sm font-bold text-[#00FFFF] uppercase tracking-wider mb-2 flex items-center gap-1.5">
  <Award className="w-4 h-4" />Submission Expectations
  </h3>
  <ul className="space-y-2 text-sm text-slate-400 leading-relaxed font-sans font-medium">
  {activeProb.expectations.split('\n').filter(Boolean).map((exp, i) => (
  <li key={i} className="flex gap-2 items-start">
- <span className="text-[#00FF66] font-mono font-bold mt-0.5 shrink-0">•</span><span>{exp.trim()}</span>
+ <span className="text-[#00FFFF] font-mono font-bold mt-0.5 shrink-0">•</span><span>{exp.trim()}</span>
  </li>
  ))}
  </ul>
@@ -748,7 +712,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  {/* [02] Announcements */}
  <motion.div variants={cardV}>
  <GlassPanel className="p-6">
- <SectionHeader icon={MessageSquare} iconColor="text-yellow-400" index={2} rightSlot={<Badge color="yellow" pulse>Live Feed</Badge>}>
+ <SectionHeader icon={MessageSquare} iconColor="text-[#00FFFF]" index={2} rightSlot={<Badge color="yellow" pulse>Live Feed</Badge>}>
  Global Announcements
  </SectionHeader>
  <div className="space-y-3 max-h-64 overflow-y-auto scrollbar-none pr-1">
@@ -760,8 +724,8 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  </motion.div>
  ) : announcements.map((item, idx) => (
  <motion.div key={item.id} variants={fadeUp} initial="hidden" animate="visible"
- className="p-3 bg-yellow-400/[0.04] border-l-2 border-yellow-400 rounded-r-xl">
- <div className="flex justify-between items-center mb-1 text-[10px] font-mono text-emerald-400">
+ className="p-3 bg-blue-400/[0.04] border-l-2 border-blue-400 rounded-r-xl">
+ <div className="flex justify-between items-center mb-1 text-[10px] font-mono text-cyan-400">
  <span className="font-bold">BROADCAST #{announcements.length - idx}</span>
  <span>{item.timestamp}</span>
  </div>
@@ -777,7 +741,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  {/* [03] Team Members */}
  <motion.div variants={cardV}>
  <GlassPanel className="p-6">
- <SectionHeader icon={Users} iconColor="text-yellow-400" index={3}>
+ <SectionHeader icon={Users} iconColor="text-[#00FFFF]" index={3}>
  Team Participants
  </SectionHeader>
 
@@ -786,14 +750,12 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  ) : teamData?.Members?.length > 0 ? (
  <motion.div variants={stagger} initial="hidden" animate="visible" className="grid grid-cols-1 md:grid-cols-2 gap-4">
  {teamData.Members.map((member, index) => {
- const uploadErr = uploadErrors[member.name];
- const memberCerts = teamData.Certificates?.[member.name] || [];
  return (
  <motion.div key={index} variants={cardV} layout
  className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] flex flex-col gap-3">
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
  <div className="flex items-center gap-3">
- <span className="w-7 h-7 rounded bg-black/60 border border-[#00FF66]/20 text-[#00FF66] flex items-center justify-center text-sm font-bold font-mono shrink-0">
+ <span className="w-7 h-7 rounded bg-black/60 border border-[#3B82F6]/20 text-[#00FFFF] flex items-center justify-center text-sm font-bold font-mono shrink-0">
  {String(index + 1).padStart(2, '0')}
  </span>
  <h4 className="text-base font-bold text-white uppercase tracking-wide font-mono">{member.name}</h4>
@@ -803,20 +765,20 @@ export default function ProblemDashboard({ onLogout, onBack }) {
 
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-xs font-mono text-slate-400 mt-2 p-3 bg-black/40 rounded-lg border border-white/5">
  <div className="truncate flex items-center gap-2">
- <span className="text-[9px] text-yellow-500/70 uppercase tracking-widest font-bold w-10">Mail</span>
+ <span className="text-[9px] text-[#00FFFF]/70 uppercase tracking-widest font-bold w-10">Mail</span>
  <span className="truncate text-white/80">{member.email}</span>
  </div>
  <div className="flex items-center gap-2">
- <span className="text-[9px] text-yellow-500/70 uppercase tracking-widest font-bold w-10">Phone</span>
+ <span className="text-[9px] text-[#00FFFF]/70 uppercase tracking-widest font-bold w-10">Phone</span>
  <span className="text-white/80">{member.phone}</span>
  </div>
  <div className="flex items-center gap-2">
- <span className="text-[9px] text-yellow-500/70 uppercase tracking-widest font-bold w-10">Dept</span>
- <span className="text-emerald-400 font-bold uppercase">{member.year} • {member.branch}</span>
+ <span className="text-[9px] text-[#00FFFF]/70 uppercase tracking-widest font-bold w-10">Dept</span>
+ <span className="text-cyan-400 font-bold uppercase">{member.year} • {member.branch}</span>
  </div>
  <div className="flex items-center gap-2">
- <span className="text-[9px] text-yellow-500/70 uppercase tracking-widest font-bold w-10">Stay</span>
- <span className="text-[#00FF66] font-bold uppercase">{member.accommodation || 'Dayscholar'}</span>
+ <span className="text-[9px] text-[#00FFFF]/70 uppercase tracking-widest font-bold w-10">Stay</span>
+ <span className="text-[#00FFFF] font-bold uppercase">{member.accommodation || 'Dayscholar'}</span>
  </div>
  </div>
 
@@ -842,7 +804,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
   {/* [05] Submit GitHub Repo Link */}
   <motion.div variants={cardV}>
   <GlassPanel neonColor="yellow" className="p-6">
-  <SectionHeader icon={Globe} iconColor="text-yellow-400" index={5} rightSlot={<Badge color="yellow">Repo Link</Badge>}>
+  <SectionHeader icon={Globe} iconColor="text-[#00FFFF]" index={5} rightSlot={<Badge color="yellow">Repo Link</Badge>}>
   GitHub Repository Link
   </SectionHeader>
   <p className="text-sm text-slate-400 font-sans leading-relaxed mb-4 font-medium">
@@ -851,7 +813,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
   <AnimatePresence>
   {linkSuccess && (
   <motion.div variants={scaleIn} initial="hidden" animate="visible" exit="exit"
-  className="mb-4 p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold rounded-xl text-sm flex items-center gap-2">
+  className="mb-4 p-3 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 font-semibold rounded-xl text-sm flex items-center gap-2">
   <CheckCircle className="w-4 h-4 shrink-0" />{linkSuccess}
   </motion.div>
   )}
@@ -865,10 +827,10 @@ export default function ProblemDashboard({ onLogout, onBack }) {
   <form onSubmit={handleSubmitLink} className="space-y-3">
   <input type="url" required value={repoLinkInput} onChange={e => setRepoLinkInput(e.target.value)}
   placeholder="https://github.com/your-team/dsfrutar26-project"
-  className="w-full px-4 py-3 bg-black/40 border border-white/10 focus:border-yellow-400/60 rounded-xl text-white placeholder-slate-700 focus:outline-none text-sm font-mono transition-colors" />
+  className="w-full px-4 py-3 bg-black/40 border border-white/10 focus:border-blue-400/60 rounded-xl text-white placeholder-slate-700 focus:outline-none text-sm font-mono transition-colors" />
   <motion.button type="submit" disabled={submittingLink}
   whileHover={{ scale: submittingLink ? 1 : 1.01 }} whileTap={{ scale: submittingLink ? 1 : 0.99 }}
-  className="w-full bg-yellow-400 hover:bg-yellow-500 text-slate-950 font-extrabold py-3 px-4 rounded-xl text-sm uppercase tracking-widest transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 lab-btn-ripple">
+  className="w-full bg-blue-400 hover:bg-blue-500 text-slate-950 font-extrabold py-3 px-4 rounded-xl text-sm uppercase tracking-widest transition-colors cursor-pointer disabled:opacity-50 flex items-center justify-center gap-2 lab-btn-ripple">
   <Send className="w-4 h-4" />
   {submittingLink ? 'Submitting...' : 'Submit Repository'}
   </motion.button>
@@ -878,7 +840,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
   className="mt-4 pt-3 border-t border-white/[0.05] text-xs font-mono flex items-center justify-between text-slate-500">
   <span>Submitted Repo:</span>
   <a href={teamData.DeployedLink} target="_blank" rel="noreferrer"
-  className="text-yellow-400 hover:underline flex items-center gap-1 font-semibold">
+  className="text-[#00FFFF] hover:underline flex items-center gap-1 font-semibold">
   View Repository<ExternalLink className="w-3 h-3 shrink-0" />
   </a>
   </motion.div>
@@ -904,7 +866,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  onClick={() => setConfirmSelectionProb(null)} />
  <motion.div variants={scaleIn} initial="hidden" animate="visible" exit="exit" className="relative w-full max-w-md">
  <GlassPanel neonColor="green" className="p-7 text-center shadow-2xl">
- <div className="w-12 h-12 rounded-full bg-[#00FF66]/10 border border-[#00FF66]/25 text-[#00FF66] flex items-center justify-center mx-auto mb-5">
+ <div className="w-12 h-12 rounded-full bg-[#3B82F6]/10 border border-[#3B82F6]/25 text-[#00FFFF] flex items-center justify-center mx-auto mb-5">
  <Lock className="w-5 h-5" />
  </div>
  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2 font-mono">Confirm Challenge Selection</h3>
@@ -925,7 +887,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  </motion.button>
  <motion.button onClick={handleLockSelection} disabled={isLocking}
  whileHover={{ scale: isLocking ? 1 : 1.03 }} whileTap={{ scale: isLocking ? 1 : 0.97 }}
- className={`flex-1 ${isLocking ? 'bg-zinc-600 opacity-50 cursor-not-allowed text-white' : 'bg-[#00FF66] hover:bg-yellow-400 hover:text-black text-slate-950 cursor-pointer'} font-extrabold py-2.5 rounded-xl text-[10px] uppercase transition-colors flex items-center justify-center gap-1.5`}>
+ className={`flex-1 ${isLocking ? 'bg-zinc-600 opacity-50 cursor-not-allowed text-white' : 'bg-[#3B82F6] hover:bg-blue-400 hover:text-black text-slate-950 cursor-pointer'} font-extrabold py-2.5 rounded-xl text-[10px] uppercase transition-colors flex items-center justify-center gap-1.5`}>
  <Lock className="w-3 h-3" />{isLocking ? 'Locking...' : 'Lock Selection'}
  </motion.button>
  </div>

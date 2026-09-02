@@ -134,8 +134,8 @@ export default function FeedbackModal({ teamId, regNo, memberName, onClose, onSu
  <> · AGENT: <span className="text-slate-400 font-bold">{memberName}</span></>
  )}
  </p>
- <p className="text-[10px] text-yellow-500/80 font-mono-custom mt-1.5 flex items-center gap-1">
- <span className="inline-block w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse" />
+ <p className="text-[10px] text-[#00FFFF]/80 font-mono-custom mt-1.5 flex items-center gap-1">
+ <span className="inline-block w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
  Complete to unlock your participation certificate download
  </p>
  </div>
@@ -220,7 +220,7 @@ export default function FeedbackModal({ teamId, regNo, memberName, onClose, onSu
  <Star
  className={`w-8 h-8 transition-all duration-200 ${
  isActive
- ? 'text-yellow-400 fill-yellow-400 drop-shadow-[0_0_6px_rgba(250,204,21,0.6)]'
+ ? 'text-[#00FFFF] fill-blue-400 drop-shadow-[0_0_6px_rgba(0,255,255,0.6)]'
  : 'text-zinc-700 fill-zinc-900'
  }`}
  />
@@ -228,7 +228,7 @@ export default function FeedbackModal({ teamId, regNo, memberName, onClose, onSu
  );
  })}
  {rating > 0 && (
- <span className="ml-2 text-xs font-bold text-yellow-400 font-mono-custom tracking-wider">
+ <span className="ml-2 text-xs font-bold text-[#00FFFF] font-mono-custom tracking-wider">
  {rating}/5
  {rating === 5 ? ' — Excellent!' : rating === 4 ? ' — Great!' : rating === 3 ? ' — Good' : rating === 2 ? ' — Fair' : ' — Poor'}
  </span>

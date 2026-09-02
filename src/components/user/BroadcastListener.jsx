@@ -176,12 +176,12 @@ export default function BroadcastListener() {
  <>
  {/* Desktop Notification Banner Prompt if default permission */}
  {notifPermission === 'default' && (
- <div className="fixed top-3 right-3 z-50 bg-slate-900/90 border border-amber-500/40 text-amber-300 text-xs px-3 py-2 rounded-lg shadow-xl flex items-center gap-2 ">
- <Bell className="w-4 h-4 animate-bounce text-amber-400" />
+ <div className="fixed top-3 right-3 z-50 bg-slate-900/90 border border-blue-500/40 text-[#00FFFF]/90 text-xs px-3 py-2 rounded-lg shadow-xl flex items-center gap-2 ">
+ <Bell className="w-4 h-4 animate-bounce text-[#00FFFF]" />
  <span>Enable Desktop Notifications for live announcement alerts</span>
  <button
  onClick={requestNotificationPermission}
- className="bg-amber-500 hover:bg-amber-400 text-black font-bold px-2 py-1 rounded text-[10px] uppercase transition-colors"
+ className="bg-blue-500 hover:bg-blue-400 text-black font-bold px-2 py-1 rounded text-[10px] uppercase transition-colors"
  >
  Allow
  </button>
@@ -197,10 +197,10 @@ export default function BroadcastListener() {
  animate={{ opacity: 1, x: 0, y: 0, scale: 1 }}
  exit={{ opacity: 0, x: 60, scale: 0.9, transition: { duration: 0.25 } }}
  transition={{ type: 'spring', damping: 22, stiffness: 280 }}
- className="relative bg-gradient-to-b from-slate-900/95 via-slate-950/98 to-slate-900/95 border-2 border-yellow-500/80 rounded-2xl p-4 shadow-[0_10px_35px_rgba(234,179,8,0.35)] overflow-hidden"
+ className="relative bg-gradient-to-b from-slate-900/95 via-slate-950/98 to-slate-900/95 border-2 border-blue-500/80 rounded-2xl p-4 shadow-[0_10px_35px_rgba(0,255,255,0.35)] overflow-hidden"
  >
  {/* Top accent glow */}
- <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-500 via-amber-400 to-yellow-500" />
+ <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-blue-400 to-blue-500" />
 
  {/* Close Button */}
  <button
@@ -213,16 +213,16 @@ export default function BroadcastListener() {
 
  {/* Header section */}
  <div className="flex items-center gap-3 mb-2.5 pr-6">
- <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-yellow-500/20 border border-yellow-400/40 text-yellow-400 flex-shrink-0">
+ <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-blue-500/20 border border-blue-400/40 text-[#00FFFF] flex-shrink-0">
  <Megaphone className="w-5 h-5 animate-pulse" />
  <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
- <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span>
- <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-yellow-500"></span>
+ <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+ <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
  </span>
  </div>
  <div>
  <div className="flex items-center gap-2">
- <span className="text-[9px] font-mono tracking-widest uppercase bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 px-1.5 py-0.5 rounded font-bold">
+ <span className="text-[9px] font-mono tracking-widest uppercase bg-blue-500/20 text-[#00FFFF]/90 border border-blue-500/30 px-1.5 py-0.5 rounded font-bold">
  Mainframe Announcement
  </span>
  <span className="text-[10px] font-mono text-slate-400">
@@ -231,7 +231,7 @@ export default function BroadcastListener() {
  </div>
  {/* <h4 className="text-sm font-bold text-white tracking-wide mt-0.5 flex items-center gap-1">
  Announcement
- <Sparkles className="w-3.5 h-3.5 text-yellow-400 inline" />
+ <Sparkles className="w-3.5 h-3.5 text-[#00FFFF] inline" />
  </h4> */}
  </div>
  </div>
@@ -252,7 +252,7 @@ export default function BroadcastListener() {
  initial={{ width: '100%' }}
  animate={{ width: '0%' }}
  transition={{ duration: 5, ease: 'linear' }}
- className="h-full bg-gradient-to-r from-yellow-400 via-amber-500 to-yellow-400"
+ className="h-full bg-gradient-to-r from-blue-400 via-blue-500 to-blue-400"
  />
  </div>
  </motion.div>

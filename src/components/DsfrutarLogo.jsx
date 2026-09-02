@@ -4,11 +4,11 @@ import React from 'react';
  * DSFRUTAR-2K26 Next-Gen Cyber-Futuristic Brand Identity
  * 100% Vector SVG Prism Core + Radiant Holographic Typography
  */
-export default function DsfrutarLogo({ 
-  className = "text-4xl", 
+export default function DsfrutarLogo({
+  className = "text-4xl",
   inline = false,
   showSub = true,
-  glow = "emerald" 
+  glow = "emerald"
 }) {
   if (inline) {
     return (
@@ -27,11 +27,11 @@ export default function DsfrutarLogo({
 
         {/* Wordmark: DSFRUTAR */}
         <span className="font-black bg-gradient-to-r from-white via-[#00FF88] to-[#00F0FF] bg-clip-text text-transparent tracking-widest mr-2 drop-shadow-[0_0_12px_rgba(0,255,136,0.3)]">
-          DSFRUTAR
+          DISFRUTAR
         </span>
 
         {/* Year Pill: 2K26 */}
-        <div className="px-2 py-0.5 rounded-md bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 text-black font-mono-custom font-black text-[0.62em] tracking-wider border border-yellow-300 shadow-[0_0_15px_rgba(255,215,0,0.4)]">
+        <div className="px-2 py-0.5 rounded-md bg-gradient-to-r from-blue-400 via-blue-400 to-blue-500 text-black font-mono-custom font-black text-[0.62em] tracking-wider border border-blue-300 shadow-[0_0_15px_rgba(0,255,255,0.4)]">
           2K26
         </div>
       </div>
@@ -41,12 +41,12 @@ export default function DsfrutarLogo({
   // Hero / Center Stacked Version
   return (
     <div className={`flex flex-col items-center justify-center select-none font-orbitron ${className}`}>
-      
+
       {/* Top Floating Cyber Emblem */}
       <div className="relative mb-3 group">
         {/* Radiant Ambient Aura */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#00FF88]/30 via-[#00F0FF]/30 to-[#FFD700]/20 rounded-2xl blur-xl transition-all duration-500 group-hover:blur-2xl" />
-        
+
         <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-black/70 border border-white/20 backdrop-blur-xl flex items-center justify-center shadow-[0_0_35px_rgba(0,255,136,0.3)] transition-transform duration-300 group-hover:scale-105">
           <svg viewBox="0 0 24 24" className="w-9 h-9 sm:w-11 sm:h-11 text-[#00FF88] drop-shadow-[0_0_12px_#00FF88]" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" stroke="url(#logoGrad)" />
@@ -66,14 +66,14 @@ export default function DsfrutarLogo({
 
       {/* Main Glowing Holographic Title Header */}
       <div className="relative flex flex-wrap items-center justify-center gap-2 sm:gap-3 py-1">
-        
+
         {/* DSFRUTAR Gradient Wordmark */}
         <h1 className="text-[1.1em] sm:text-[1.25em] font-black tracking-[0.18em] uppercase bg-gradient-to-r from-white via-[#00FF88] to-[#00F0FF] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(0,255,136,0.35)]">
           DSFRUTAR
         </h1>
 
         {/* 2K26 Neon Capsule Badge */}
-        <div className="inline-flex items-center px-3 py-1 rounded-xl bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-500 text-black font-mono-custom font-extrabold text-[0.68em] tracking-widest border border-yellow-200 shadow-[0_0_20px_rgba(255,215,0,0.5)]">
+        <div className="inline-flex items-center px-3 py-1 rounded-xl bg-gradient-to-r from-blue-400 via-blue-400 to-blue-500 text-black font-mono-custom font-extrabold text-[0.68em] tracking-widest border border-blue-200 shadow-[0_0_20px_rgba(0,255,255,0.5)]">
           2K26
         </div>
 

@@ -93,8 +93,8 @@ export default memo(function AnimatedBackground({ phase = 'phase1' }) {
 
         // Particle generator
         const isMobile = window.innerWidth < 768;
-        const NODE_COUNT = isMobile ? 22 : 45;
-        const SHARD_COUNT = isMobile ? 8 : 18;
+        const NODE_COUNT = isMobile ? 15 : 30;
+        const SHARD_COUNT = isMobile ? 5 : 12;
 
         const nodes = [];
         for (let i = 0; i < NODE_COUNT; i++) {
@@ -308,23 +308,23 @@ export default memo(function AnimatedBackground({ phase = 'phase1' }) {
             <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#05070B]">
                 {/* Top-Left Ambient Nebula Glow */}
                 <div 
-                    className="absolute -top-[20%] -left-[10%] w-[65vw] h-[65vw] max-w-[750px] max-h-[750px] rounded-full blur-[140px] opacity-25 transition-all duration-1000"
+                    className="absolute -top-[20%] -left-[10%] w-[65vw] h-[65vw] max-w-[750px] max-h-[750px] rounded-full blur-[80px] transform-gpu opacity-25 transition-all duration-1000"
                     style={{
                         background: phase === 'phase3' 
-                            ? 'radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(239,68,68,0.2) 60%, transparent 80%)'
+                            ? 'radial-gradient(circle, rgba(0,255,255,0.6) 0%, rgba(239,68,68,0.2) 60%, transparent 80%)'
                             : phase === 'phase5'
                             ? 'radial-gradient(circle, rgba(168,85,247,0.5) 0%, rgba(0,240,255,0.2) 60%, transparent 80%)'
-                            : 'radial-gradient(circle, rgba(0,255,102,0.5) 0%, rgba(0,240,255,0.2) 60%, transparent 80%)'
+                            : 'radial-gradient(circle, rgba(0,255,255,0.5) 0%, rgba(0,240,255,0.2) 60%, transparent 80%)'
                     }}
                 />
 
                 {/* Bottom-Right Ambient Nebula Glow */}
                 <div 
-                    className="absolute -bottom-[20%] -right-[10%] w-[65vw] h-[65vw] max-w-[750px] max-h-[750px] rounded-full blur-[140px] opacity-20 transition-all duration-1000"
+                    className="absolute -bottom-[20%] -right-[10%] w-[65vw] h-[65vw] max-w-[750px] max-h-[750px] rounded-full blur-[80px] transform-gpu opacity-20 transition-all duration-1000"
                     style={{
                         background: phase === 'phase3'
-                            ? 'radial-gradient(circle, rgba(239,68,68,0.5) 0%, rgba(255,215,0,0.2) 60%, transparent 80%)'
-                            : 'radial-gradient(circle, rgba(0,240,255,0.5) 0%, rgba(0,255,102,0.2) 60%, transparent 80%)'
+                            ? 'radial-gradient(circle, rgba(239,68,68,0.5) 0%, rgba(0,255,255,0.2) 60%, transparent 80%)'
+                            : 'radial-gradient(circle, rgba(0,240,255,0.5) 0%, rgba(0,255,255,0.2) 60%, transparent 80%)'
                     }}
                 />
 
@@ -348,6 +348,7 @@ export default memo(function AnimatedBackground({ phase = 'phase1' }) {
             <canvas
                 ref={canvasRef}
                 className="fixed inset-0 z-0 pointer-events-none w-full h-full mix-blend-screen"
+                style={{ willChange: 'transform' }}
             />
         </>
     );

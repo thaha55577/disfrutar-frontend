@@ -121,8 +121,8 @@ export default function AcmLogo({
             fontWeight="900"
             fontSize="26"
             letterSpacing="2.5"
-            fill="#FFFFFF"
-            className="drop-shadow-[0_1px_3px_rgba(0,0,0,0.35)]"
+            fill="#00FFFF"
+            className="drop-shadow-[0_1px_3px_rgba(0,255,255,0.35)]"
           >
             KARE
           </text>
@@ -136,8 +136,8 @@ export default function AcmLogo({
             fontWeight="900"
             fontSize="34"
             letterSpacing="2"
-            fill="#FFFFFF"
-            className="drop-shadow-[0_2px_5px_rgba(0,0,0,0.4)]"
+            fill="#00FFFF"
+            className="drop-shadow-[0_2px_5px_rgba(0,255,255,0.4)]"
           >
             ACM
           </text>

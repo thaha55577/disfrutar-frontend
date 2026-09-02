@@ -17,7 +17,7 @@ export default function RoadmapPage({ onBack }) {
  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
  whileHover={{ scale: 1.1 }}
  whileTap={{ scale: 0.92 }}
- className="group absolute top-20 left-4 z-50 flex items-center gap-2 px-3 py-2 rounded-xl border border-zinc-800 hover:border-[#00FF66]/60 bg-black/60 text-slate-400 hover:text-[#00FF66] transition-colors cursor-pointer"
+ className="group absolute top-20 left-4 z-50 flex items-center gap-2 px-3 py-2 rounded-xl border border-zinc-800 hover:border-[#3B82F6]/60 bg-black/60 text-slate-400 hover:text-[#00FFFF] transition-colors cursor-pointer"
  >
  <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
  <span className="text-[11px] font-mono uppercase tracking-widest hidden sm:inline">Back</span>
