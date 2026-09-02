@@ -69,7 +69,7 @@ export default function DsfrutarLogo({
 
         {/* DSFRUTAR Gradient Wordmark */}
         <h1 className="text-[1.1em] sm:text-[1.25em] font-black tracking-[0.18em] uppercase bg-gradient-to-r from-white via-[#00FF88] to-[#00F0FF] bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(0,255,136,0.35)]">
-          DSFRUTAR
+          DISFRUTAR
         </h1>
 
         {/* 2K26 Neon Capsule Badge */}

@@ -96,7 +96,7 @@ export default function GfgScreen({ onBack }) {
             {/* Links and Handles */}
             <div className="space-y-3 mt-8 border-t border-white/10 pt-6">
               <a
-                href="https://acm.klu.ac.in"
+                href="https://kare.acm.org/"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center justify-between p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#00F0FF]/50 hover:bg-[#00F0FF]/[0.05] transition-all text-xs text-slate-200 group"
@@ -106,13 +106,13 @@ export default function GfgScreen({ onBack }) {
                   <span>Official Chapter Portal</span>
                 </span>
                 <span className="text-[#00F0FF] group-hover:underline flex items-center gap-1 font-mono-custom font-semibold">
-                  acm.klu.ac.in
+                  kare.acm.org
                   <ExternalLink className="w-3 h-3" />
                 </span>
               </a>
 
               <a
-                href="https://www.instagram.com/acm_kare/"
+                href="https://www.instagram.com/acmkare/"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center justify-between p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#00F0FF]/50 hover:bg-[#00F0FF]/[0.05] transition-all text-xs text-slate-200 group"
@@ -122,13 +122,13 @@ export default function GfgScreen({ onBack }) {
                   <span>Instagram</span>
                 </span>
                 <span className="text-[#00F0FF] group-hover:underline flex items-center gap-1 font-mono-custom font-semibold">
-                  @acm_kare
+                  @acmkare
                   <ExternalLink className="w-3 h-3" />
                 </span>
               </a>
 
               <a
-                href="https://www.linkedin.com/company/acm-kare-student-chapter/"
+                href="https://www.linkedin.com/company/acmkare"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center justify-between p-4 rounded-xl bg-white/[0.03] border border-white/10 hover:border-[#00F0FF]/50 hover:bg-[#00F0FF]/[0.05] transition-all text-xs text-slate-200 group"

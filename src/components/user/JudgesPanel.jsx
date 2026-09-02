@@ -10,12 +10,12 @@ export default function JudgesPanel({ onBack }) {
   const chiefGuests = [
     {
       id: "judge-1",
-      name: "Parimal Sesha Sai Adini",
-      initials: "PS",
-      Role: "Backend Developer",
-      company: "NOMISO",
+      name: "John Paul Antony A",
+      image: "/JOHN.png",
+      Role: "Associate Manager - Technical in L&D",
+      company: "Happiest Minds Technologies Ltd, Bangalore",
       badgeColor: "cyan",
-      description: "Software engineer with over a year of experience building backend systems and AI-powered applications across telecom and B2B SaaS. Core strengths in Java/Spring Boot microservices, event-driven architectures, and RAG-based agentic workflows with production-grade design patterns. Deep expertise in distributed systems, multi-tenant architectures, and GenAI engineering."
+      description: "7000+ Employees trained in GenAI & Agentic AI for Software Development and Testing and Data Engineering Tech Stack and below verticals.Able to train and work for the following Tech stack Generative AI in SDLC for all Roles - frontend, backend, Testing, Data Engineering etc,RAGAgentic AI,Vector database - Chromadb, Redis,Knowledge graph -  Neo4j,Prompt Engineering,]Python for Web App, Devops , Data Analytics,GitHub Copilot,IoT and ML/AI,Data Analysis, Data Analytics, Data science,UI Full stack development,Data Engineering, Python Full stack development,UI Full stack Development,MS Copilot 365,GitHub Copilot,ML and DL, Artificial Intelligence,Power Automate with MS Copilot."
     }
   ];
 
@@ -93,9 +93,13 @@ export default function JudgesPanel({ onBack }) {
                   {/* Pure Vector VIP Holographic Avatar Badge */}
                   <div className="relative shrink-0">
                     <div className="w-24 h-24 md:w-28 md:h-28 rounded-2xl bg-gradient-to-tr from-black via-zinc-900 to-zinc-800 border-2 border-blue-400/50 group-hover:border-blue-400 flex items-center justify-center shadow-[0_0_20px_rgba(0,255,255,0.25)] relative z-10 transition-transform duration-300 group-hover:scale-105">
-                      <span className="text-2xl md:text-3xl font-black font-orbitron text-[#00FFFF] drop-shadow-[0_0_10px_rgba(0,255,255,0.5)]">
-                        {guest.initials}
-                      </span>
+                      {guest.image ? (
+                        <img src={guest.image} alt={guest.name} className="w-full h-full object-cover rounded-[14px]" />
+                      ) : (
+                        <span className="text-2xl md:text-3xl font-black font-orbitron text-[#00FFFF] drop-shadow-[0_0_10px_rgba(0,255,255,0.5)]">
+                          {guest.initials}
+                        </span>
+                      )}
                       {/* Orbital Corner Ring */}
                       <div className="absolute -bottom-2 -right-2 p-1.5 rounded-lg bg-black border border-[#00FFFF]/50 shadow">
                         <Sparkles className="w-3.5 h-3.5 text-[#00FFFF]" />
@@ -154,9 +158,13 @@ export default function JudgesPanel({ onBack }) {
 
                   {/* Holographic Initial Avatar */}
                   <div className="w-24 h-24 rounded-2xl bg-gradient-to-tr from-black via-zinc-900 to-zinc-800 border-2 border-blue-400 flex items-center justify-center shadow-[0_0_30px_rgba(0,255,255,0.3)] mb-4">
-                    <span className="text-3xl font-black font-orbitron text-[#00FFFF]">
-                      {selectedJudge.initials}
-                    </span>
+                    {selectedJudge.image ? (
+                      <img src={selectedJudge.image} alt={selectedJudge.name} className="w-full h-full object-cover rounded-[14px]" />
+                    ) : (
+                      <span className="text-3xl font-black font-orbitron text-[#00FFFF]">
+                        {selectedJudge.initials}
+                      </span>
+                    )}
                   </div>
 
                   <h3 className="text-xl font-bold text-white font-orbitron mb-1">{selectedJudge.name}</h3>
