@@ -5,8 +5,9 @@ import {
   ChevronUp, ChevronDown, FlaskConical
 } from 'lucide-react';
 import AcmHeroEmblem from '../AcmHeroEmblem';
+import { API_BASE_URL } from '../../utils/api';
 
-const ROADMAP_STAGES = [
+const BASE_ROADMAP_STAGES = [
   {
     id: '01',
     name: 'Registration',
@@ -94,7 +95,53 @@ const crystalKeyframesCSS = `
 
 export default function HelixRoadmap({ fullscreen = false }) {
   const containerRef = useRef(null);
+  const [currentPhaseIndex, setCurrentPhaseIndex] = useState(0);
+  const hasInitialized = useRef(false);
+  const lastPhaseRef = useRef(-1);
+  
+  // Define these before fetchSettings so we can update them on initial fetch
   const targetProgress = useMotionValue(0);
+  const smoothProgress = useSpring(targetProgress, { damping: 20, stiffness: 100, mass: 0.8 });
+
+  const fetchSettings = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/settings`);
+      if (res.ok) {
+        const data = await res.json();
+        const phaseIdx = data.CurrentPhaseIndex !== undefined ? parseInt(data.CurrentPhaseIndex, 10) : 0;
+        setCurrentPhaseIndex(phaseIdx);
+
+        if (phaseIdx !== lastPhaseRef.current) {
+          const progressVal = phaseIdx / (BASE_ROADMAP_STAGES.length - 1);
+          targetProgress.set(progressVal);
+          
+          if (!hasInitialized.current) {
+            hasInitialized.current = true;
+            if (smoothProgress.set) smoothProgress.set(progressVal);
+          }
+          lastPhaseRef.current = phaseIdx;
+        }
+      }
+    } catch (err) {
+      console.error('Error fetching settings:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSettings();
+    const interval = setInterval(fetchSettings, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const ROADMAP_STAGES = useMemo(() => {
+    return BASE_ROADMAP_STAGES.map((stage, idx) => {
+      let status = 'upcoming';
+      if (idx < currentPhaseIndex) status = 'completed';
+      else if (idx === currentPhaseIndex) status = 'current';
+      return { ...stage, status };
+    });
+  }, [currentPhaseIndex]);
+
   const [activeIdx, setActiveIdx] = useState(0);
   const activeIdxRef = useRef(0);
   
@@ -111,11 +158,11 @@ export default function HelixRoadmap({ fullscreen = false }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const smoothProgress = useSpring(targetProgress, { damping: 20, stiffness: 100, mass: 0.8 });
+
 
   useMotionValueEvent(smoothProgress, "change", (latest) => {
-    let closestIdx = Math.round(latest * (ROADMAP_STAGES.length - 1));
-    closestIdx = Math.max(0, Math.min(ROADMAP_STAGES.length - 1, closestIdx));
+    let closestIdx = Math.round(latest * (BASE_ROADMAP_STAGES.length - 1));
+    closestIdx = Math.max(0, Math.min(BASE_ROADMAP_STAGES.length - 1, closestIdx));
     if (closestIdx !== activeIdxRef.current) {
       activeIdxRef.current = closestIdx;
       setActiveIdx(closestIdx);
@@ -198,19 +245,19 @@ export default function HelixRoadmap({ fullscreen = false }) {
   }, [fullscreen, handleWheel, mouseX, mouseY]);
 
   const goToStage = useCallback((idx) => {
-    const progressVal = idx / (ROADMAP_STAGES.length - 1);
+    const progressVal = idx / (BASE_ROADMAP_STAGES.length - 1);
     targetProgress.set(progressVal);
   }, [targetProgress]);
 
   const nextStage = useCallback(() => {
-    if (activeIdx < ROADMAP_STAGES.length - 1) goToStage(activeIdx + 1);
+    if (activeIdx < BASE_ROADMAP_STAGES.length - 1) goToStage(activeIdx + 1);
   }, [activeIdx, goToStage]);
 
   const prevStage = useCallback(() => {
     if (activeIdx > 0) goToStage(activeIdx - 1);
   }, [activeIdx, goToStage]);
 
-  const totalStages = ROADMAP_STAGES.length;
+  const totalStages = BASE_ROADMAP_STAGES.length;
   const angleStep = 360 / totalStages; // 45 degrees for 8 cards
 
   return (

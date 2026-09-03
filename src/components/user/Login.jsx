@@ -35,13 +35,13 @@ export default function Login({ onLoginSuccess }) {
 
     return (
         <div className="relative w-full min-h-[100dvh] flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-hidden bg-[#030712]">
-            
+
             {/* Ambient Multi-spectral Cyber Lighting */}
             <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] max-w-[650px] max-h-[650px] bg-gradient-to-tr from-[#3B82F6]/20 via-[#00F0FF]/15 to-[#FFD700]/10 rounded-full blur-[140px] pointer-events-none" />
             <div className="absolute bottom-10 right-10 w-[40vw] h-[40vw] max-w-[400px] max-h-[400px] bg-[#3B82F6]/10 rounded-full blur-[120px] pointer-events-none" />
-            
+
             {/* Perspective Grid Background Overlay */}
-            <div 
+            <div
                 className="absolute inset-0 opacity-[0.07] pointer-events-none"
                 style={{
                     backgroundImage: `
@@ -53,7 +53,7 @@ export default function Login({ onLoginSuccess }) {
             />
 
             {/* Central Holographic Container */}
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, y: 24, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
@@ -71,7 +71,7 @@ export default function Login({ onLoginSuccess }) {
 
                 {/* Main Glassmorphic Login Terminal */}
                 <div className="relative rounded-3xl bg-black/75 border border-white/15 p-7 sm:p-10 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_40px_rgba(0,255,255,0.1)] overflow-hidden">
-                    
+
                     {/* Top Radiant Laser Line */}
                     <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#3B82F6] to-transparent shadow-[0_0_15px_#3B82F6]" />
 
@@ -93,7 +93,7 @@ export default function Login({ onLoginSuccess }) {
 
                     {/* Error Toast */}
                     {error && (
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: -8 }}
                             animate={{ opacity: 1, y: 0 }}
                             className="mb-6 p-3.5 rounded-xl bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs font-mono-custom flex items-center gap-3 backdrop-blur-md shadow-[0_0_15px_rgba(244,63,94,0.2)]"
@@ -107,8 +107,8 @@ export default function Login({ onLoginSuccess }) {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         {/* Team ID / Username */}
                         <div>
-                            <label 
-                                htmlFor="team-id" 
+                            <label
+                                htmlFor="team-id"
                                 className="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-2 font-mono-custom flex items-center justify-between"
                             >
                                 <span className="flex items-center gap-1.5 text-cyan-400">
@@ -134,8 +134,8 @@ export default function Login({ onLoginSuccess }) {
 
                         {/* Password / Access Key */}
                         <div>
-                            <label 
-                                htmlFor="password" 
+                            <label
+                                htmlFor="password"
                                 className="block text-[11px] font-bold uppercase tracking-wider text-slate-300 mb-2 font-mono-custom flex items-center justify-between"
                             >
                                 <span className="flex items-center gap-1.5 text-[#00FFFF]">
@@ -186,13 +186,6 @@ export default function Login({ onLoginSuccess }) {
                             <CheckCircle2 className="w-3 h-3 text-cyan-400" />
                             <span>System Online</span>
                         </span>
-                        <a 
-                            href="/admingfg" 
-                            className="text-rose-400/80 hover:text-rose-300 hover:underline flex items-center gap-1"
-                        >
-                            <Shield className="w-3 h-3 text-rose-400" />
-                            <span>Admin Console (admin123)</span>
-                        </a>
                     </div>
 
                 </div>
