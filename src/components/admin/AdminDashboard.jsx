@@ -531,7 +531,7 @@ export default function AdminDashboard({ onLock }) {
       if (!teamId || teamId === 'SYSTEM_SETTINGS') return;
 
       const teamName = t['TeamName'] || t['Team Name'] || t['teamname'] || t['team_name'] || '';
-      const password = t['Password'] || t['password'] || '';
+      const password = t['Password'] || t['password'] || teamId;
       const leaderName = t['Leader Name'] || t['LeaderName'] || t['leadername'] || t['leader_name'] || t['Name'] || t['name'] || '';
       const leaderEmail = t['Leader Email'] || t['LeaderEmail'] || t['leaderemail'] || t['leader_email'] || t['Email'] || t['email'] || '';
       const leaderPhone = t['Leader Phone'] || t['LeaderPhone'] || t['leaderphone'] || t['leader_phone'] || t['Phone'] || t['phone'] || '';

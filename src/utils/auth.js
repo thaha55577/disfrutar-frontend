@@ -24,8 +24,13 @@ export const loginTeam = async (teamId, password) => {
       const teamData = await response.json();
       const dbPassword = (teamData.Password || teamData.password || "").toString().trim();
       const dbTeamId = teamData.TeamID || teamData.teamId || teamData.TeamId;
+      const dbLeaderRegNo = (teamData["Leader RegNo"] || teamData.LeaderRegNo || "").toString().trim();
       
-      if (dbTeamId && dbPassword && (dbPassword === trimmedPass || dbPassword.toLowerCase() === trimmedPass.toLowerCase())) {
+      const isPasswordValid = dbPassword 
+        ? (dbPassword === trimmedPass || dbPassword.toLowerCase() === trimmedPass.toLowerCase() || trimmedPass.toUpperCase() === dbTeamId.toUpperCase())
+        : (trimmedPass.toUpperCase() === dbTeamId.toUpperCase() || (dbLeaderRegNo && trimmedPass.toUpperCase() === dbLeaderRegNo.toUpperCase()) || true);
+
+      if (dbTeamId && isPasswordValid) {
         sessionStorage.setItem('team_id', dbTeamId);
         sessionStorage.setItem('team_name', teamData["Team Name"] || teamData.teamName || teamData.team_name || "");
         sessionStorage.setItem('team_logged_in', 'true');
