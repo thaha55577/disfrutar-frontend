@@ -61,111 +61,7 @@ const GlassPanel = memo(({ children, className = '', neonColor = 'white', ...pro
  );
 });
 
-// ─── Default Problems Catalog (Offline / Deployed Fallback) ────────────────
-const DEFAULT_PROBLEMS = [
-  {
-    title: "FactoryFlow - Autonomous Production Schedule Recovery Agent",
-    description: "A manufacturing company has a production schedule containing jobs with different deadlines, priorities, machine requirements, processing times, and dependencies. During production, machine downtime, urgent orders, material shortages, or unexpected processing delays can invalidate the original plan. Build an AI system that detects disruptions, reconstructs the production plan, simulates alternatives, and autonomously selects the recovery strategy that minimizes late orders, downtime, and cost.",
-    requirements: "1. Implement at least five meaningful intelligence components: job completion-time prediction, machine availability/failure-risk prediction, order-priority prediction, delay propagation, business-impact prediction, plus a scheduling/optimization component.\n2. Maintain an internal production-state representation.\n3. Implement a team-built agent/controller that generates and compares multiple recovery strategies.\n4. Support at least two disruption types and machine/job constraints.\n5. Provide a simulation mode where a judge can inject a disruption during the demo.\n6. Expose the agent's evidence, decisions, and re-planning logic.",
-    expectations: "1. Dashboard must show production schedule, machine utilization, bottlenecks, jobs at risk, and expected delays.\n2. Show current plan vs proposed plan, predicted cost, and late-order reduction.\n3. Show the agent's decision trace and why the selected schedule was preferred.\n4. Demonstrate re-planning after a second disruption.\n5. Measure improvement against a fixed-rule or original-schedule baseline."
-  },
-  {
-    title: "ReleaseSentinel - Autonomous Software Release Risk Planner",
-    description: "Software releases combine code changes, test results, dependencies, historical incidents, ownership information, and service criticality. A release can pass standard checks and still cause production failures. Build an AI system that estimates release risk, identifies likely failure modes, evaluates rollout strategies, and determines whether the release should proceed, be staged, delayed, or prepared for rollback.",
-    requirements: "1. Implement at least five meaningful intelligence components: change-risk analysis, test-failure prediction, defect/affected-module prediction, historical-incident similarity, production-impact prediction, plus rollout-risk optimization.\n2. Represent the current release state and affected services/modules.\n3. Build an agent that selects additional evidence, generates rollout strategies, and compares their predicted outcomes.\n4. Support staged-rollout scenarios such as 10%, 50%, and 100%.\n5. Use a small prepared incident history and inject known risky releases for evaluation.\n6. Do not use an external LLM as the primary release decision engine.",
-    expectations: "1. Dashboard must show release readiness, risk by module, predicted failure modes, similar incidents, rollout strategy comparison, and final recommendation.\n2. Show expected impact of each rollout strategy.\n3. Show evidence behind the release decision.\n4. Evaluate earlier detection against a simple pass/fail CI baseline.\n5. Demonstrate re-evaluation after simulated production feedback."
-  },
-  {
-    title: "InvoiceMind - Autonomous Accounts-Payable Investigation Agent",
-    description: "Organizations process large numbers of invoices containing prices, quantities, vendor information, purchase orders, taxes, and payment history. Manual review is expensive, while simple rules generate too many false positives. Build an AI system that investigates invoices before payment, determines whether an anomaly is legitimate, estimates financial risk, and chooses approve, hold, verify, or escalate.",
-    requirements: "1. Implement invoice-field extraction, duplicate detection, price/quantity anomaly detection, vendor behavior risk, payment risk, and financial-impact estimation.\n2. Maintain invoice, purchase-order, and vendor history.\n3. Build an agent that selectively investigates related records instead of inspecting everything equally.\n4. Support duplicate, price, quantity, and vendor-history anomaly scenarios.\n5. Include simulated reviewer feedback.\n6. Track review effort and money at risk.",
-    expectations: "1. Dashboard must show total invoices, auto-approved vs reviewed, money at risk, duplicate clusters, vendor risk, and investigation queue.\n2. Show evidence used for each decision.\n3. Show financial impact and confidence.\n4. Compare agent-assisted review against simple rules.\n5. Measure reduction in review effort while controlling false approvals."
-  },
-  {
-    title: "ReturnWise - Autonomous E-Commerce Returns Investigator",
-    description: "Online businesses lose money when legitimate returns are mixed with repeated abuse, damaged-item claims, incorrect-product claims, and unusual customer behavior. Build an AI investigation system that determines whether a return should be approved, inspected, exchanged, restricted, or escalated while balancing customer experience and business loss.",
-    requirements: "1. Implement return-reason classification, customer behavior modeling, product-defect patterns, return-abuse risk, resale-value prediction, and expected-loss estimation.\n2. Combine current return evidence with customer and product history.\n3. Build an agent that investigates context, simulates possible actions, and selects one under business constraints.\n4. Support multiple return scenarios and changing customer/product history.\n5. Allow a judge to modify history and rerun the decision.\n6. Include an explicit loss-vs-customer-impact trade-off.",
-    expectations: "1. Dashboard must show return risk, customer/product factors, estimated financial impact, recommended action, and decision evidence.\n2. Show how the decision changes when context changes.\n3. Show trends in return abuse and product defects.\n4. Compare against a simple rule baseline.\n5. Report prevented-loss or expected-loss reduction."
-  },
-  {
-    title: "ShiftPilot - Autonomous Service-Center Queue Orchestrator",
-    description: "Customer-service centers face unpredictable demand and limited staffing. Predicting call volume alone does not solve the problem. Build an AI system that forecasts workload, predicts queue delays, estimates SLA risk, and dynamically determines how available agents should be allocated across queues.",
-    requirements: "1. Implement arrival-volume forecasting, service-time prediction, queue-delay prediction, customer-priority prediction, agent-skill matching, and SLA-risk prediction.\n2. Represent queue state, agent capacity, skills, and current assignments.\n3. Build an agent that generates alternative staffing allocations and simulates waiting-time/SLA outcomes.\n4. Support demand spikes and agent unavailability.\n5. Compare dynamic allocation with a fixed staffing policy.\n6. Allow re-planning when new demand arrives.",
-    expectations: "1. Dashboard must show queue health, predicted arrivals, wait-time forecasts, SLA risk, agent utilization, and current vs proposed allocation.\n2. Show before/after simulation for a disruption.\n3. Display the selected allocation and its expected improvement.\n4. Measure waiting-time and SLA-risk reduction.\n5. Show agent decision history."
-  },
-  {
-    title: "Adaptive Story Challenge - Autonomous Learning Strategy Engine",
-    description: "Conventional learning systems often present the same content sequence to every learner. Build an adaptive learning environment that maintains an evolving representation of learner knowledge and chooses the next learning intervention expected to maximize mastery within a limited interaction or time budget.",
-    requirements: "1. Implement knowledge-state estimation, concept mastery prediction, misconception detection, difficulty estimation, learning-gain prediction, and content/branch ranking.\n2. Maintain a structured concept graph and learner state.\n3. Build an agent that chooses among revision, new concept, hint, explanation, easier/harder challenge, or scenario branch.\n4. Track correctness, response time, repeated errors, and simulated learner profiles.\n5. Give the agent a limited teaching budget.\n6. Compare adaptive learning against a fixed sequence.",
-    expectations: "1. Dashboard must show mastery graph, misconception map, learning trajectory, chosen interventions, difficulty progression, and predicted final mastery.\n2. Show how the strategy changes for different learner states.\n3. Show before/after learning outcome.\n4. Measure expected or simulated learning-gain improvement over baseline.\n5. Keep the experience interactive rather than a generic chatbot."
-  },
-  {
-    title: "StockShield - Inventory Disruption Recovery Agent",
-    description: "Retail businesses often discover stock problems too late. A product can look healthy while demand shifts, suppliers delay shipments, or a region consumes inventory faster. Build an AI system that predicts upcoming inventory failures and autonomously creates recovery strategies.",
-    requirements: "1. Implement demand forecasting, stockout probability, supplier-delay prediction, regional demand-shift detection, recovery-outcome prediction, and lost-revenue prediction.\n2. Model products, suppliers, regions, lead times, and inventory capacity.\n3. Build an agent that generates reorder, transfer, allocation, or supplier-switch strategies.\n4. Simulate the outcome of competing recovery strategies.\n5. Support at least two disruption types.\n6. Allow a judge to inject a demand or supplier shock.",
-    expectations: "1. Dashboard must show products at risk, stockout dates, supplier risk, regional demand, expected lost revenue, and strategy comparison.\n2. Show the recommended recovery action.\n3. Show current vs recovered inventory state.\n4. Compare against a fixed reorder-point baseline.\n5. Measure stockouts or expected lost revenue avoided."
-  },
-  {
-    title: "ClaimCheck - Autonomous Insurance Claim Investigation Simulator",
-    description: "Insurance operations receive claims containing narratives, invoices, timelines, prior claim history, and supporting evidence. Simple rules create excessive false positives while manual review is expensive. Build an AI investigation system that determines which claims can be processed quickly, which require more evidence, and which require human investigation.",
-    requirements: "1. Implement claim-type classification, narrative inconsistency detection, historical-claim similarity, fraud/anomaly risk, claim-cost prediction, and evidence-priority ranking.\n2. Build an agent that chooses which evidence source to inspect next.\n3. Maintain an investigation state and update claim risk after new evidence.\n4. Use synthetic or public claim-style data only.\n5. Include simulated reviewer feedback.\n6. Treat the system as an operational simulation, not real insurance adjudication.",
-    expectations: "1. Dashboard must show claims queue, risk score, estimated financial exposure, evidence inspected, investigation path, final action, and confidence.\n2. Show which evidence changed the decision.\n3. Measure analyst-review reduction and false-positive trade-off.\n4. Demonstrate selective investigation rather than full review for every claim.\n5. Compare with a rule-based triage baseline."
-  },
-  {
-    title: "ProcurementPilot - Intelligent Supplier Strategy Agent",
-    description: "A company must procure materials from several suppliers under uncertain price, quality, delivery, and capacity conditions. Build an AI system that predicts supplier performance and creates procurement strategies that minimize total business risk and cost.",
-    requirements: "1. Implement price prediction, supplier reliability prediction, delivery-time prediction, quality-risk prediction, capacity prediction, and procurement cost/risk optimization.\n2. Use at least three suppliers with minimum/maximum order constraints.\n3. Build an agent that generates multiple allocation strategies and simulates their outcomes.\n4. Support supplier disruption such as price, capacity, or reliability changes.\n5. Track historical supplier performance.\n6. Re-plan dynamically when supplier conditions change.",
-    expectations: "1. Dashboard must show supplier risk matrix, recommended allocation, expected cost, delivery risk, quality risk, and scenario comparison.\n2. Show agent strategy history.\n3. Compare against a single-supplier or rule-based baseline.\n4. Measure expected cost/risk improvement under changing conditions.\n5. Explain why the allocation was selected."
-  },
-  {
-    title: "ProcessX - Autonomous Business Bottleneck Investigator",
-    description: "A company notices that a critical business process has become slower or more expensive but does not know which stage is responsible or what intervention will provide the best return. Build an AI system that investigates the process, identifies bottlenecks, generates hypotheses, simulates interventions, and recommends the highest-impact improvement.",
-    requirements: "1. Implement process-time prediction, bottleneck detection, process anomaly detection, delay-cause prediction, intervention-impact prediction, and ROI optimization.\n2. Use event-log style process data with at least five stages.\n3. Build an agent that chooses which stage or factor to investigate next.\n4. Generate at least two intervention options with different costs and expected effects.\n5. Simulate intervention outcomes before recommending one.\n6. Support a second bottleneck appearing after the first intervention.",
-    expectations: "1. Dashboard must show process map, stage health, bottleneck ranking, delay causes, investigation tree, intervention simulation, expected improvement, and ROI.\n2. Show the investigation path used by the agent.\n3. Compare against fixed-rule bottleneck analysis.\n4. Measure expected cycle-time or cost improvement.\n5. Demonstrate re-planning after a new bottleneck appears."
-  },
-  {
-    title: "SOCPilot - Autonomous Security Alert Investigation Agent",
-    description: "Security teams receive large volumes of alerts, but many are low-value or duplicate signals. Build an AI security-operations agent that groups related alerts into probable incidents, investigates the most important evidence, and prioritizes what analysts should handle first.",
-    requirements: "1. Implement alert classification, alert clustering/relatedness, user/device behavior anomaly detection, threat-severity prediction, incident correlation, and risk-priority scoring.\n2. Generate at least 100 simulated alerts with known multi-alert incident groups.\n3. Build an investigation state and agent that chooses what to inspect next.\n4. Support escalation, grouping, suppression, and analyst-review outcomes.\n5. Include analyst feedback simulation.\n6. Measure noise reduction without losing true simulated incidents.",
-    expectations: "1. Dashboard must show alert volume, incident clusters, threat severity, investigation graph/timeline, analyst priority queue, agent actions, and supporting evidence.\n2. Show alert-to-incident compression.\n3. Show why each incident received its priority.\n4. Compare against raw-alert severity sorting.\n5. Measure analyst workload reduction and incident preservation."
-  },
-  {
-    title: "SLAShield - Security SLA Breach Prevention Agent",
-    description: "Security incidents can become business failures when response or resolution SLAs are missed. Build an AI system that predicts which tickets are likely to breach SLA and autonomously recommends re-assignment, escalation, or prioritization actions.",
-    requirements: "1. Implement incident-severity classification, resolution-time prediction, SLA-breach probability, analyst workload prediction, queue-delay prediction, and escalation-priority scoring.\n2. Use synthetic security tickets with configurable SLA rules.\n3. Model analyst capacity, current queue, ticket severity, and historical resolution times.\n4. Build an agent that simulates reassignments/escalations before deciding.\n5. Allow tickets and workload to change during the demo.\n6. Compare against first-come-first-served or static severity rules.",
-    expectations: "1. Dashboard must show active tickets, SLA countdowns, breach probabilities, analyst capacity, escalation queue, breach trend, and breaches avoided.\n2. Show before/after queue state.\n3. Show the reason for escalation or reassignment.\n4. Measure expected SLA breaches avoided and workload balance.\n5. Demonstrate live re-planning as the queue changes."
-  },
-  {
-    title: "IdentityShield - Autonomous Account Compromise Investigator",
-    description: "Account compromise rarely appears as a single obvious event. A risky incident may consist of an unusual login, a new device, abnormal access patterns, a privilege change, and unusual data activity. Build an AI investigation system that estimates compromise probability and determines what evidence should be examined next.",
-    requirements: "1. Implement login anomaly detection, device-behavior modeling, access-pattern anomaly detection, privilege-change risk, data-access anomaly detection, and account-compromise probability.\n2. Create normal behavior profiles from historical simulated activity.\n3. Inject several compromise patterns.\n4. Build an agent that selects evidence sources and updates account risk.\n5. Include time, location, device, endpoint, privilege, and data-access signals.\n6. Link decisions to evidence.",
-    expectations: "1. Dashboard must show account risk, normal vs current behavior, incident timeline, evidence inspected, affected resources, compromise probability, and containment priority.\n2. Show which signal combinations increased the risk.\n3. Measure detection lead time and false-alert trade-off.\n4. Compare against independent rule alerts.\n5. Demonstrate investigation of an unseen compromise pattern."
-  },
-  {
-    title: "SupplyGuard - Autonomous Software Supply-Chain Compromise Investigator",
-    description: "A software dependency can be vulnerable or compromised without being directly imported by an important application path. Build an AI system that determines the real blast radius of a suspicious dependency and selects the safest remediation strategy.",
-    requirements: "1. Implement dependency/component extraction, vulnerability classification, reachability/impact analysis, exploitability prediction, application-impact prediction, and remediation-risk modeling.\n2. Accept package manifests and a prepared vulnerability dataset.\n3. Construct a direct and transitive dependency graph.\n4. Inject a vulnerable or suspicious dependency.\n5. Build an agent that compares upgrade, isolation, replacement, or monitoring strategies.\n6. Calculate before/after exposure.",
-    expectations: "1. Dashboard must show dependency graph, vulnerable components, affected features, reachability score, blast radius, remediation comparison, and before/after risk.\n2. Explain why a vulnerable component is or is not high priority.\n3. Measure prioritization accuracy on injected scenarios.\n4. Measure reduced unnecessary remediation compared with severity-only ranking.\n5. Show the agent's remediation reasoning path."
-  },
-  {
-    title: "PhishChain - Social-Engineering Attack Progression Analyzer",
-    description: "Sophisticated social-engineering attacks may unfold through a sequence of messages: trust-building, urgency, impersonation, information requests, and escalation. Build an AI system that models the conversation as an evolving threat state rather than classifying each message independently.",
-    requirements: "1. Implement message intent classification, social-engineering stage detection, sender-relationship modeling, URL/attachment risk, conversation anomaly detection, and attack-progression scoring.\n2. Use synthetic or public example conversations.\n3. Track sender relationship and conversation metadata.\n4. Inject staged attack patterns.\n5. Build an agent that updates the threat state and selects evidence.\n6. Identify the messages that caused the risk state to change.",
-    expectations: "1. Dashboard must show threat score over time, manipulation stages, suspicious messages, sender relationship, evidence indicators, attack progression graph, and recommended action.\n2. Compare conversation-level analysis with message-by-message classification.\n3. Measure earlier detection of multi-stage attacks.\n4. Explain the transition from normal conversation to high-risk interaction.\n5. Show agent evidence-selection steps."
-  },
-  {
-    title: "BreachScope - Autonomous Security Incident Impact Estimator",
-    description: "After a security incident is detected, responders need to know what has actually been affected: users, applications, data categories, and business services. Build an AI system that estimates incident impact and investigates the evidence required to reduce uncertainty.",
-    requirements: "1. Implement security-event classification, asset relationship/impact modeling, lateral-impact prediction, data-sensitivity classification, business-impact prediction, and incident-severity modeling.\n2. Use simulated authentication, process, file, network, and asset relationship data.\n3. Include several incident scenarios with known ground truth.\n4. Build an agent that traces impact paths and selectively requests evidence.\n5. Represent asset criticality and data sensitivity.\n6. Link every conclusion to supporting evidence.",
-    expectations: "1. Dashboard must show incident map, affected assets, data categories, business-impact score, attack/impact timeline, uncertainty zones, containment priority, and evidence graph.\n2. Show how new evidence reduces uncertainty.\n3. Measure affected-asset recall against synthetic ground truth.\n4. Measure analyst time saved compared with manual impact reconstruction.\n5. Keep all inputs simulated or authorized."
-  },
-  {
-    title: "VulnOps - Autonomous Vulnerability Remediation Planner",
-    description: "A company may have hundreds of known vulnerabilities but limited engineering capacity. The difficult problem is deciding what to fix first, which remediation strategy to use, and how much risk the company will remove by doing so. Build a security planning system that treats remediation as a constrained optimization problem.",
-    requirements: "1. Implement vulnerability severity modeling, exploitability prediction, asset-exposure modeling, business-criticality prediction, fix-impact prediction, and remediation-priority optimization.\n2. Use a prepared vulnerability dataset with asset, exposure, criticality, exploitability, and estimated effort.\n3. Give the system a limited remediation budget.\n4. Build an agent that compares remediation alternatives.\n5. Inject a new high-priority vulnerability during the planning cycle.\n6. Re-plan the queue without restarting.",
-    expectations: "1. Dashboard must show vulnerability heatmap, business exposure, exploitability, priority queue, engineering effort, predicted risk reduction, before/after simulation, and agent planning trace.\n2. Compare against severity-only prioritization.\n3. Measure expected risk reduction per unit of engineering effort.\n4. Show how the plan changes when the remediation budget changes.\n5. Show why the final queue is optimal or preferable under the defined objective."
-  }
-];
+
 
 // ─── Badge ────────────────────────────────────────────────────────────────────
 const Badge = memo(({ children, color = 'green', pulse = false, className = '' }) => {
@@ -255,13 +151,14 @@ export default function ProblemDashboard({ onLogout, onBack }) {
         setTeamData(data);
         if (data.DeployedLink) setRepoLinkInput(data.DeployedLink);
         const dbSelection = data.SelectedProblem || data.selectedProblem;
-        if (dbSelection && list.length > 0) {
-          const matched = list.find(p => p.title === dbSelection);
-          if (matched) {
-            setSelectedProblem(matched);
-            localStorage.setItem(`selected_problem_${teamId}`, JSON.stringify(matched));
-          }
-        } else if (!dbSelection) {
+        if (dbSelection) {
+          const dbTitleNorm = typeof dbSelection === 'string' ? dbSelection.trim().toLowerCase() : (dbSelection.title || '').trim().toLowerCase();
+          const activeList = (list && list.length > 0) ? list : problemsList;
+          const matched = activeList.find(p => (p.title || '').trim().toLowerCase() === dbTitleNorm);
+          const finalProb = matched || (typeof dbSelection === 'object' ? dbSelection : { title: dbSelection, description: '' });
+          setSelectedProblem(finalProb);
+          localStorage.setItem(`selected_problem_${teamId}`, JSON.stringify(finalProb));
+        } else {
           setSelectedProblem(null);
           localStorage.removeItem(`selected_problem_${teamId}`);
         }
@@ -285,201 +182,268 @@ export default function ProblemDashboard({ onLogout, onBack }) {
   const PROBLEMS_CACHE_KEY = 'problems_csv_cache';
   const PROBLEMS_CACHE_TTL_MS = 0; // Caching disabled: always fetch fresh problem CSV data from backend
 
- const parseProblemsCsv = (csvText) => {
- const lines = csvText.split('\n');
- const list = [];
- for (let i = 1; i < lines.length; i++) {
- const line = lines[i].trim();
- if (!line) continue;
- const content = line.replace(/^"/, '').replace(/"$/, '');
- const fields = content.split('","');
- if (fields.length >= 4) {
- list.push({
- title: fields[0].trim(),
- description: fields[1].trim(),
- requirements: fields[2].replace(/\\n/g, '\n').trim(),
- expectations: fields[3].replace(/\\n/g, '\n').trim(),
- });
- }
- }
- return list;
- };
+  // RFC 4180 compliant CSV parser capable of handling multi-line quoted fields
+  const parseProblemsCsv = (csvText) => {
+    if (!csvText || !csvText.trim()) return [];
 
- useEffect(() => {
- const loadProblemData = async () => {
- setCsvLoading(true);
- setCsvLoadError('');
- try {
- const raw = sessionStorage.getItem(PROBLEMS_CACHE_KEY);
- if (raw) {
- const cached = JSON.parse(raw);
- const age = Date.now() - (cached.timestamp || 0);
- if (age < PROBLEMS_CACHE_TTL_MS && Array.isArray(cached.list) && cached.list.length > 0) {
- setProblemsList(cached.list);
- setCsvLoading(false);
- await fetchCounts();
- await fetchTeamDetails(cached.list);
- return;
- }
- }
- } catch (_) { sessionStorage.removeItem(PROBLEMS_CACHE_KEY); }
+    const rows = [];
+    let currentRow = [];
+    let currentField = '';
+    let inQuotes = false;
 
- try {
- let csvText = '';
- try {
- const rawRes = await fetch(`${API_BASE_URL}/api/problems/raw-csv`);
- if (rawRes.ok) {
- const rawData = await rawRes.json();
- if (rawData.csv_content) {
- csvText = rawData.csv_content;
- }
- }
- } catch (_) { }
+    for (let i = 0; i < csvText.length; i++) {
+      const char = csvText[i];
+      const nextChar = csvText[i + 1];
 
- if (!csvText) {
- const urlRes = await fetch(`${API_BASE_URL}/api/problems/csv`);
- if (urlRes.ok) {
- const { presigned_url } = await urlRes.json();
- const response = await fetch(presigned_url);
- if (response.ok) {
- csvText = await response.text();
- }
- }
- }
+      if (inQuotes) {
+        if (char === '"' && nextChar === '"') {
+          currentField += '"';
+          i++; // skip escaped quote
+        } else if (char === '"') {
+          inQuotes = false;
+        } else {
+          currentField += char;
+        }
+      } else {
+        if (char === '"') {
+          inQuotes = true;
+        } else if (char === ',') {
+          currentRow.push(currentField);
+          currentField = '';
+        } else if (char === '\r') {
+          // ignore CR
+        } else if (char === '\n') {
+          currentRow.push(currentField);
+          currentField = '';
+          if (currentRow.some(f => f.trim())) {
+            rows.push(currentRow);
+          }
+          currentRow = [];
+        } else {
+          currentField += char;
+        }
+      }
+    }
 
- const list = csvText ? parseProblemsCsv(csvText) : [];
- const finalList = list.length > 0 ? list : DEFAULT_PROBLEMS;
- try { sessionStorage.setItem(PROBLEMS_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), list: finalList })); } catch (_) { }
+    if (currentField || currentRow.length > 0) {
+      currentRow.push(currentField);
+      if (currentRow.some(f => f.trim())) {
+        rows.push(currentRow);
+      }
+    }
 
- setProblemsList(finalList);
- await fetchCounts();
- await fetchTeamDetails(finalList);
- } catch (err) {
- console.warn('Problem CSV Load Notice: Falling back to default challenge catalog.', err);
- setProblemsList(DEFAULT_PROBLEMS);
- setCsvLoadError('');
- await fetchCounts();
- await fetchTeamDetails(DEFAULT_PROBLEMS);
- } finally {
- setCsvLoading(false);
- }
- };
- loadProblemData();
- // eslint-disable-next-line react-hooks/exhaustive-deps
- }, []);
+    if (rows.length === 0) return [];
 
- useEffect(() => {
- let pollTimeout;
- const pollLoop = async () => {
- await fetchCounts();
- await fetchTeamDetails();
- // High-concurrency safe: Base 6000ms delay + up to 4000ms random jitter
- const delay = 6000 + Math.random() * 4000;
- pollTimeout = setTimeout(pollLoop, delay);
- };
+    // Determine if first row is header
+    let startIdx = 0;
+    const firstRowStr = rows[0].join(',').toLowerCase();
+    if (firstRowStr.includes('title') || firstRowStr.includes('description')) {
+      startIdx = 1;
+    }
 
- pollLoop();
- return () => clearTimeout(pollTimeout);
- // eslint-disable-next-line react-hooks/exhaustive-deps
- }, [problemsList]);
+    const list = [];
+    for (let i = startIdx; i < rows.length; i++) {
+      const r = rows[i];
+      if (!r || r.length === 0) continue;
+      const title = (r[0] || '').trim();
+      if (!title) continue;
 
- useEffect(() => {
- const sync = () => {
- const saved = localStorage.getItem('hackathon_announcements');
- setAnnouncements(saved ? JSON.parse(saved) : []);
- };
- sync();
- window.addEventListener('announcements_updated', sync);
- window.addEventListener('storage', sync);
- return () => {
- window.removeEventListener('announcements_updated', sync);
- window.removeEventListener('storage', sync);
- };
- }, []);
+      list.push({
+        title: title,
+        description: (r[1] || '').trim(),
+        requirements: (r[2] || '').replace(/\\n/g, '\n').trim(),
+        expectations: (r[3] || '').replace(/\\n/g, '\n').trim(),
+      });
+    }
 
- // ── Action Handlers ──────────────────────────────────────────────────────
- const handleLockSelection = async () => {
- if (!confirmSelectionProb || isLocking) return;
- setIsLocking(true);
- setErrorMessage('');
- try {
- const response = await fetch(
- `${API_BASE_URL}/teams/${encodeURIComponent(teamId)}/select-problem`,
- { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problem_title: confirmSelectionProb.title }) }
- );
- const result = await response.json();
- if (response.ok) {
- localStorage.setItem(`selected_problem_${teamId}`, JSON.stringify(confirmSelectionProb));
- setSelectedProblem(confirmSelectionProb);
- setConfirmSelectionProb(null);
- await fetchTeamDetails();
- } else {
- setErrorMessage(result.detail || 'Could not select challenge. Please try again.');
- setConfirmSelectionProb(null);
- await fetchCounts();
- }
- } catch (err) {
- console.error('Lock selection network error:', err);
- setErrorMessage('Network error locking in challenge. Please try again.');
- } finally {
- setIsLocking(false);
- }
- };
+    return list;
+  };
 
- const handleSubmitLink = async (e) => {
- e.preventDefault();
- if (!repoLinkInput.trim()) return;
- setSubmittingLink(true); setLinkSuccess(''); setLinkError('');
- try {
- const response = await fetch(
- `${API_BASE_URL}/teams/${encodeURIComponent(teamId)}/submit-link`,
- { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ deployed_link: repoLinkInput.trim() }) }
- );
- const data = await response.json();
- if (response.ok) { setLinkSuccess('GitHub repository link submitted successfully.'); await fetchTeamDetails(); }
- else { setLinkError(data.detail || 'Failed to submit link. Please try again.'); }
- } catch (err) {
- setLinkError('Network error submitting repository link.');
- } finally { setSubmittingLink(false); }
- };
+  useEffect(() => {
+    const loadProblemData = async () => {
+      setCsvLoading(true);
+      setCsvLoadError('');
+      try {
+        const raw = sessionStorage.getItem(PROBLEMS_CACHE_KEY);
+        if (raw) {
+          const cached = JSON.parse(raw);
+          const age = Date.now() - (cached.timestamp || 0);
+          if (age < PROBLEMS_CACHE_TTL_MS && Array.isArray(cached.list) && cached.list.length > 0) {
+            setProblemsList(cached.list);
+            setCsvLoading(false);
+            await fetchCounts();
+            await fetchTeamDetails(cached.list);
+            return;
+          }
+        }
+      } catch (_) { sessionStorage.removeItem(PROBLEMS_CACHE_KEY); }
 
- // ── Metadata Helpers ─────────────────────────────────────────────────────
- const getDifficulty = (idx) => {
- const labels = ['Hard', 'Medium', 'Hard', 'Medium', 'Insane'];
- const label = labels[idx] ?? 'Insane';
- const colors = {
- Hard: 'text-rose-400 bg-rose-500/10 border-rose-500/25',
- Medium: 'text-[#00FFFF] bg-blue-500/10 border-blue-500/25',
- Insane: 'text-red-400 bg-red-500/10 border-red-500/25',
- };
- return { label, color: colors[label] };
- };
- const getPoints = i => (['500 PTS', '300 PTS', '450 PTS', '350 PTS', '600 PTS'])[i] ?? '600 PTS';
- const getCategory = i => (['Cryptography', 'Network Sync', 'Reverse Eng.', 'Security Protocol', 'Smart Contracts'])[i] ?? 'Smart Contracts';
- const getEntrypoint = i => (['satellite_sub_dev_04', 'dynamic_salt_buffer', 'router_telemetry_parser', 'sat_link_mainframe', 'ledger_smart_contract'])[i] ?? 'ledger_smart_contract';
- const getVector = i => (['0x7FFF98AC8210', '0x7FFF98AC8220', '0x7FFF98AC8230', '0x7FFF98AC8240', '0x7FFF98AC8250'])[i] ?? '0x7FFF98AC8250';
- const getSeed = i => (['0xDEADC0DE_FEEDFACE', '0xDEADC0DE_FEED1234', '0xDEADC0DE_FEED5678', '0xDEADC0DE_FEED90AB', '0xDEADC0DE_FEEDCDEF'])[i] ?? '0xDEADC0DE_FEEDCDEF';
+      try {
+        let csvText = '';
+        try {
+          const rawRes = await fetch(`${API_BASE_URL}/api/problems/raw-csv`);
+          if (rawRes.ok) {
+            const rawData = await rawRes.json();
+            if (rawData.csv_content) {
+              csvText = rawData.csv_content;
+            }
+          }
+        } catch (_) { }
 
- const activeSelectedProblem = React.useMemo(() => {
- if (!selectedProblem) return null;
- const searchList = problemsList.length > 0 ? problemsList : DEFAULT_PROBLEMS;
- const titleToMatch = typeof selectedProblem === 'string' ? selectedProblem.trim().toLowerCase() : (selectedProblem.title || '').trim().toLowerCase();
- const matched = searchList.find(p => p.title.trim().toLowerCase() === titleToMatch) ||
- DEFAULT_PROBLEMS.find(p => p.title.trim().toLowerCase() === titleToMatch);
+        if (!csvText) {
+          const urlRes = await fetch(`${API_BASE_URL}/api/problems/csv`);
+          if (urlRes.ok) {
+            const { presigned_url } = await urlRes.json();
+            const response = await fetch(presigned_url);
+            if (response.ok) {
+              csvText = await response.text();
+            }
+          }
+        }
 
- if (matched) {
- return {
- ...matched,
- ...(typeof selectedProblem === 'object' ? selectedProblem : {}),
- requirements: (typeof selectedProblem === 'object' && selectedProblem.requirements) || matched.requirements || '',
- expectations: (typeof selectedProblem === 'object' && selectedProblem.expectations) || matched.expectations || '',
- };
- }
- return typeof selectedProblem === 'object' ? selectedProblem : { title: selectedProblem, description: '' };
- }, [selectedProblem, problemsList]);
+        const list = csvText ? parseProblemsCsv(csvText) : [];
+        if (list.length > 0) {
+          try { sessionStorage.setItem(PROBLEMS_CACHE_KEY, JSON.stringify({ timestamp: Date.now(), list })); } catch (_) { }
+          setProblemsList(list);
+          setCsvLoadError('');
+          await fetchCounts();
+          await fetchTeamDetails(list);
+        } else {
+          setProblemsList([]);
+          setCsvLoadError('No problem statements uploaded yet by administrator.');
+          await fetchCounts();
+          await fetchTeamDetails([]);
+        }
+      } catch (err) {
+        console.warn('Error loading problem statements CSV:', err);
+        setProblemsList([]);
+        setCsvLoadError('Failed to load uploaded problem statements.');
+        await fetchCounts();
+        await fetchTeamDetails([]);
+      } finally {
+        setCsvLoading(false);
+      }
+    };
+    loadProblemData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
- const activeProb = activeSelectedProblem || selectedProblem;
- const si = (problemsList.length > 0 ? problemsList : DEFAULT_PROBLEMS).findIndex(p => p.title === activeProb?.title);
+  const getProblemCount = useCallback((probTitle) => {
+    if (!probTitle) return 0;
+    const targetNorm = probTitle.trim().toLowerCase();
+    for (const [key, count] of Object.entries(selectionCounts || {})) {
+      if (key.trim().toLowerCase() === targetNorm) {
+        return Number(count) || 0;
+      }
+    }
+    return 0;
+  }, [selectionCounts]);
+
+  useEffect(() => {
+    let pollTimeout;
+    const pollLoop = async () => {
+      await fetchCounts();
+      await fetchTeamDetails();
+      // High-concurrency safe: Base 6000ms delay + up to 4000ms random jitter
+      const delay = 6000 + Math.random() * 4000;
+      pollTimeout = setTimeout(pollLoop, delay);
+    };
+
+    pollLoop();
+    return () => clearTimeout(pollTimeout);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [problemsList]);
+
+  useEffect(() => {
+    const sync = () => {
+      const saved = localStorage.getItem('hackathon_announcements');
+      setAnnouncements(saved ? JSON.parse(saved) : []);
+    };
+    sync();
+    window.addEventListener('announcements_updated', sync);
+    window.addEventListener('storage', sync);
+    return () => {
+      window.removeEventListener('announcements_updated', sync);
+      window.removeEventListener('storage', sync);
+    };
+  }, []);
+
+  // ── Action Handlers ──────────────────────────────────────────────────────
+  const handleLockSelection = async () => {
+    if (!confirmSelectionProb || isLocking) return;
+    setIsLocking(true);
+    setErrorMessage('');
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/teams/${encodeURIComponent(teamId)}/select-problem`,
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ problem_title: confirmSelectionProb.title }) }
+      );
+      const result = await response.json();
+      if (response.ok) {
+        localStorage.setItem(`selected_problem_${teamId}`, JSON.stringify(confirmSelectionProb));
+        setSelectedProblem(confirmSelectionProb);
+        setConfirmSelectionProb(null);
+        await fetchTeamDetails();
+      } else {
+        const lockedTitle = result.selected_problem;
+        if (lockedTitle) {
+          const matched = problemsList.find(p => p.title.trim().toLowerCase() === lockedTitle.trim().toLowerCase());
+          const probObj = matched || { title: lockedTitle, description: '' };
+          localStorage.setItem(`selected_problem_${teamId}`, JSON.stringify(probObj));
+          setSelectedProblem(probObj);
+          setConfirmSelectionProb(null);
+          await fetchTeamDetails();
+        } else {
+          setErrorMessage(result.detail || 'Could not select challenge. Please try again.');
+          setConfirmSelectionProb(null);
+          await fetchCounts();
+        }
+      }
+    } catch (err) {
+      console.error('Lock selection network error:', err);
+      setErrorMessage('Network error locking in challenge. Please try again.');
+    } finally {
+      setIsLocking(false);
+    }
+  };
+
+
+
+  const handleSubmitLink = async (e) => {
+    e.preventDefault();
+    if (!repoLinkInput.trim()) return;
+    setSubmittingLink(true); setLinkSuccess(''); setLinkError('');
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/teams/${encodeURIComponent(teamId)}/submit-link`,
+        { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ deployed_link: repoLinkInput.trim() }) }
+      );
+      const data = await response.json();
+      if (response.ok) { setLinkSuccess('GitHub repository link submitted successfully.'); await fetchTeamDetails(); }
+      else { setLinkError(data.detail || 'Failed to submit link. Please try again.'); }
+    } catch (err) {
+      setLinkError('Network error submitting repository link.');
+    } finally { setSubmittingLink(false); }
+  };
+
+  const activeSelectedProblem = React.useMemo(() => {
+    if (!selectedProblem) return null;
+    const titleToMatch = typeof selectedProblem === 'string' ? selectedProblem.trim().toLowerCase() : (selectedProblem.title || '').trim().toLowerCase();
+    const matched = problemsList.find(p => p.title.trim().toLowerCase() === titleToMatch);
+
+    if (matched) {
+      return {
+        ...matched,
+        ...(typeof selectedProblem === 'object' ? selectedProblem : {}),
+        requirements: (typeof selectedProblem === 'object' && selectedProblem.requirements) || matched.requirements || '',
+        expectations: (typeof selectedProblem === 'object' && selectedProblem.expectations) || matched.expectations || '',
+      };
+    }
+    return typeof selectedProblem === 'object' ? selectedProblem : { title: selectedProblem, description: '' };
+  }, [selectedProblem, problemsList]);
+
+  const activeProb = activeSelectedProblem || selectedProblem;
+  const si = problemsList.findIndex(p => p.title === activeProb?.title);
  
 
  // ── Render ────────────────────────────────────────────────────────────────
@@ -589,7 +553,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  )}
 
  {!csvLoading && !csvLoadError && (
- problemsList.filter(p => (selectionCounts[p.title] || 0) < 3).length === 0 ? (
+ problemsList.filter(p => getProblemCount(p.title) < 3).length === 0 ? (
  <div className="py-16 text-center text-slate-500 font-mono text-xs italic">
  All challenge tracks have reached maximum capacity (3 teams each).
  </div>
@@ -597,7 +561,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
  <motion.div variants={stagger} initial="hidden" animate="visible"
  className="grid grid-cols-1 md:grid-cols-2 gap-6">
  {problemsList.map((prob, idx) => {
-  const count = selectionCounts[prob.title] || 0;
+  const count = getProblemCount(prob.title);
   if (count >= 3) return null;
 
   const problemNumber = String(idx + 1).padStart(2, '0');
@@ -627,11 +591,11 @@ export default function ProblemDashboard({ onLogout, onBack }) {
   <div className="w-16 h-16 rounded-2xl bg-[#3B82F6]/10 border border-[#3B82F6]/20 flex items-center justify-center text-2xl font-extrabold font-orbitron text-[#00FFFF] shadow-[0_0_20px_rgba(0,255,255,0.15)] group-hover:scale-105 transition-transform">
   #{problemNumber}
   </div>
-  <h3 className="text-base font-extrabold text-white font-orbitron uppercase tracking-wide">
-  Problem Statement {problemNumber}
+  <h3 className="text-base font-extrabold text-white font-orbitron uppercase tracking-wide px-2">
+  {prob.title || `Problem Statement ${problemNumber}`}
   </h3>
-  <p className="text-xs text-slate-400 font-sans max-w-xs">
-  Select this number to lock your problem statement. Full problem description and requirements will be revealed upon confirmation.
+  <p className="text-xs text-slate-400 font-sans max-w-xs line-clamp-3">
+  {prob.description || `Select this track to lock your problem statement. Full description and requirements will be revealed upon confirmation.`}
   </p>
   </div>
   </div>
@@ -873,7 +837,7 @@ export default function ProblemDashboard({ onLogout, onBack }) {
   <p className="text-[11px] text-slate-400 font-sans mb-6 leading-relaxed">
   You are about to lock in{' '}
   <span className="text-white font-bold font-mono">
-  "Problem Statement {String(((problemsList.length > 0 ? problemsList : DEFAULT_PROBLEMS).findIndex(p => p.title === confirmSelectionProb.title) !== -1 ? (problemsList.length > 0 ? problemsList : DEFAULT_PROBLEMS).findIndex(p => p.title === confirmSelectionProb.title) : 0) + 1).padStart(2, '0')}"
+  "Problem Statement {String((problemsList.findIndex(p => p.title === confirmSelectionProb.title) !== -1 ? problemsList.findIndex(p => p.title === confirmSelectionProb.title) : 0) + 1).padStart(2, '0')}"
   </span>.
   <br /><br />
   <span className="text-rose-400 font-semibold font-mono uppercase text-[10px]">⚠ WARNING: This decision is irreversible.</span>
