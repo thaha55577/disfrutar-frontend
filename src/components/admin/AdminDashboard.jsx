@@ -520,8 +520,76 @@ export default function AdminDashboard({ onLock }) {
  }
  }
  result.push(current.trim());
- return result.map(v => v.replace(/^"|"$/g, '').trim());
- };
+  return result.map(v => v.replace(/^"|"$/g, '').trim());
+  };
+
+  const extractTeamsFromParsed = (parsed) => {
+    const teamsMap = new Map();
+
+    parsed.forEach(t => {
+      const teamId = t['TeamID'] || t['TeamId'] || t['teamid'] || t['Team Name'] || t['teamname'] || t['team_name'] || '';
+      if (!teamId || teamId === 'SYSTEM_SETTINGS') return;
+
+      const teamName = t['TeamName'] || t['Team Name'] || t['teamname'] || t['team_name'] || '';
+      const password = t['Password'] || t['password'] || '';
+      const leaderName = t['Leader Name'] || t['LeaderName'] || t['leadername'] || t['leader_name'] || t['Name'] || t['name'] || '';
+      const leaderEmail = t['Leader Email'] || t['LeaderEmail'] || t['leaderemail'] || t['leader_email'] || t['Email'] || t['email'] || '';
+      const leaderPhone = t['Leader Phone'] || t['LeaderPhone'] || t['leaderphone'] || t['leader_phone'] || t['Phone'] || t['phone'] || '';
+      const leaderRegNo = t['Leader RegNo'] || t['LeaderRegNo'] || t['leaderregno'] || t['leader_reg_no'] || t['RegNo'] || t['Reg No'] || t['regno'] || t['reg_no'] || '';
+      const transactionId = t['Transaction ID'] || t['TransactionID'] || t['transactionid'] || t['transaction_id'] || t['TransactionStatus'] || t['transaction_status'] || '';
+      const status = t['Status'] || t['status'] || t['TransactionStatus'] || 'SUCCESS';
+      const submittedAt = t['Submitted At'] || t['SubmittedAt'] || t['submittedat'] || t['submitted_at'] || t['SubmittedTimestamp'] || t['submitted_timestamp'] || '';
+
+      if (!teamsMap.has(teamId)) {
+        teamsMap.set(teamId, {
+          TeamID: teamId,
+          TeamName: teamName,
+          Password: password,
+          LeaderName: leaderName,
+          LeaderEmail: leaderEmail,
+          LeaderPhone: leaderPhone,
+          LeaderRegNo: leaderRegNo,
+          TransactionID: transactionId,
+          Status: status,
+          SubmittedAt: submittedAt
+        });
+      } else {
+        const existing = teamsMap.get(teamId);
+        if (!existing.TeamName && teamName) existing.TeamName = teamName;
+        if (!existing.Password && password) existing.Password = password;
+        if (!existing.LeaderName && leaderName) existing.LeaderName = leaderName;
+        if (!existing.LeaderEmail && leaderEmail) existing.LeaderEmail = leaderEmail;
+        if (!existing.LeaderPhone && leaderPhone) existing.LeaderPhone = leaderPhone;
+        if (!existing.LeaderRegNo && leaderRegNo) existing.LeaderRegNo = leaderRegNo;
+      }
+    });
+
+    return Array.from(teamsMap.values());
+  };
+
+  const extractParticipantsFromParsed = (parsed) => {
+    return parsed.map(p => {
+      const teamId = p['TeamId'] || p['teamid'] || p['TeamID'] || p['Team Name'] || p['teamname'] || '';
+      const rawYear = p['Year'] || p['year'] || '0';
+      const parsedYear = parseInt(rawYear, 10);
+
+      return {
+        TeamId: teamId,
+        Name: p['Name'] || p['name'] || '',
+        RegNo: p['RegNo'] || p['Reg No'] || p['regno'] || p['reg_no'] || '',
+        Email: p['Email'] || p['email'] || '',
+        Phone: p['Phone'] || p['phone'] || '',
+        Gender: p['Gender'] || p['gender'] || '',
+        Branch: p['Branch'] || p['branch'] || '',
+        Year: isNaN(parsedYear) ? 0 : parsedYear,
+        Accommodation: p['Accommodation'] || p['accommodation'] || '',
+        HostelName: p['Hostel Name'] || p['hostelname'] || p['hostel_name'] || '',
+        RoomNo: p['Room No'] || p['roomno'] || p['room_no'] || '',
+        WardenName: p['Warden Name'] || p['wardenname'] || p['warden_name'] || '',
+        WardenPhone: p['Warden Phone'] || p['wardenphone'] || p['warden_phone'] || ''
+      };
+    }).filter(p => p.TeamId);
+  };
 
  const handleTeamsFileChange = (e) => {
  setCsvError('');
@@ -535,21 +603,13 @@ export default function AdminDashboard({ onLock }) {
  const text = event.target.result;
  const parsed = parseCSV(text);
 
- const mapped = parsed.map(t => ({
- TeamID: t['TeamID'] || t['teamid'] || t['Team Name'] || t['teamname'] || t['team_name'] || '',
- TeamName: t['Team Name'] || t['teamname'] || t['team_name'] || '',
- Password: t['Password'] || t['password'] || '',
- LeaderName: t['Leader Name'] || t['leadername'] || t['leader_name'] || '',
- LeaderEmail: t['Leader Email'] || t['leaderemail'] || t['leader_email'] || '',
- LeaderPhone: t['Leader Phone'] || t['leaderphone'] || t['leader_phone'] || '',
- LeaderRegNo: t['Leader RegNo'] || t['leaderregno'] || t['leader_reg_no'] || '',
- TransactionID: t['Transaction ID'] || t['transactionid'] || t['transaction_id'] || '',
- Status: t['Status'] || t['status'] || 'SUCCESS',
- SubmittedAt: t['Submitted At'] || t['submittedat'] || t['submitted_at'] || ''
- })).filter(t => t.TeamID && t.TeamID !== 'SYSTEM_SETTINGS');
+ const teamsMapped = extractTeamsFromParsed(parsed);
+ const participantsMapped = extractParticipantsFromParsed(parsed);
 
-
- setParsedTeams(mapped);
+ setParsedTeams(teamsMapped);
+ if (participantsMapped.length > 0) {
+ setParsedParticipants(participantsMapped);
+ }
  } catch (err) {
  console.error(err);
  setCsvError('Failed to parse Teams CSV file.');
@@ -570,24 +630,13 @@ export default function AdminDashboard({ onLock }) {
  const text = event.target.result;
  const parsed = parseCSV(text);
 
- const mapped = parsed.map(p => ({
- TeamId: p['TeamId'] || p['teamid'] || p['TeamID'] || p['Team Name'] || p['teamname'] || '',
- Name: p['Name'] || p['name'] || '',
- RegNo: p['Reg No'] || p['regno'] || p['reg_no'] || '',
- Email: p['Email'] || p['email'] || '',
- Phone: p['Phone'] || p['phone'] || '',
- Gender: p['Gender'] || p['gender'] || '',
- Branch: p['Branch'] || p['branch'] || '',
- Year: parseInt(p['Year'] || p['year'] || '0', 10),
- Accommodation: p['Accommodation'] || p['accommodation'] || '',
- HostelName: p['Hostel Name'] || p['hostelname'] || p['hostel_name'] || '',
- RoomNo: p['Room No'] || p['roomno'] || p['room_no'] || '',
- WardenName: p['Warden Name'] || p['wardenname'] || p['warden_name'] || '',
- WardenPhone: p['Warden Phone'] || p['wardenphone'] || p['warden_phone'] || ''
- })).filter(p => p.TeamId);
+ const participantsMapped = extractParticipantsFromParsed(parsed);
+ const teamsMapped = extractTeamsFromParsed(parsed);
 
-
- setParsedParticipants(mapped);
+ setParsedParticipants(participantsMapped);
+ if (teamsMapped.length > 0) {
+ setParsedTeams(teamsMapped);
+ }
  } catch (err) {
  console.error(err);
  setCsvError('Failed to parse Participants CSV file.');
