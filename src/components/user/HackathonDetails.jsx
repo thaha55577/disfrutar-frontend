@@ -390,49 +390,6 @@ export default function HackathonDetails({
                               </div>
                             </div>
                           </div>
-
-                          {/* Certificate Upload Interface Component */}
-                          <div className="mt-2 pt-3 border-t border-zinc-900/60 font-mono-custom text-[10px] space-y-2">
-                            <div className="text-[#00FFFF] font-bold uppercase tracking-wider mb-1">Course Certificate:</div>
-
-                            {/* Data Analytics Essentials Certificate Slot */}
-                            <div className="flex items-center justify-between p-2 rounded glass-panel text-[11px] text-slate-300">
-                              <span className="truncate max-w-[200px] flex items-center gap-1">
-                                {dataAnalyticsCert ? (
-                                  <><span>📄</span> <span className="text-zinc-400 font-medium">{dataAnalyticsCert.substring(dataAnalyticsCert.lastIndexOf('/') + 1)}</span></>
-                                ) : (
-                                  <span className="text-slate-600 italic">Data Analytics Essentials certificate missing</span>
-                                )}
-                              </span>
-                              {dataAnalyticsCert ? (
-                                <span className="text-[#00FFFF] font-bold uppercase glow-blue-400 text-[10px] flex items-center gap-1">
-                                  <span className="inline-block w-1 h-1 bg-blue-400 rounded-full"></span>
-                                  Verified
-                                </span>
-                              ) : (
-                                <label className={`cursor-pointer inline-flex items-center justify-center gap-1 px-2.5 py-1 rounded bg-blue-400/10 border border-blue-400/30 hover:bg-blue-400 hover:text-black font-bold uppercase text-[10px] tracking-wider transition-all duration-300 hover:shadow-[0_0_8px_rgba(0,255,255,0.25)] ${uploadingMember === member.name ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}>
-                                  <BookOpen className="w-3 h-3" />
-                                  <span>Upload Data Analytics Essentials</span>
-                                  <input
-                                    type="file"
-                                    accept="application/pdf"
-                                    className="hidden"
-                                    disabled={uploadingMember === member.name}
-                                    onChange={(e) => {
-                                      if (e.target.files && e.target.files[0]) {
-                                        const confirmed = window.confirm("Are you sure you want to upload this Data Analytics Essentials certificate? Caution: Once it is uploaded it cannot be undone.");
-                                        if (confirmed) {
-                                          handleFileUpload(member.name, e.target.files[0], "Data Analytics Essentials");
-                                        } else {
-                                          e.target.value = '';
-                                        }
-                                      }
-                                    }}
-                                  />
-                                </label>
-                              )}
-                            </div>
-
                             {/* Error Handling State */}
                             {uploadErrors[member.name] && (
                               <div className="mt-2 p-2 rounded bg-rose-950/20 border border-rose-500/30 text-rose-400 font-semibold text-[11px] uppercase tracking-wider animate-pulse">
@@ -508,8 +465,6 @@ export default function HackathonDetails({
                                 );
                               })()}
                             </div>
-
-                          </div>
                         </motion.div>
                       )
                     })}
