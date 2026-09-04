@@ -481,64 +481,97 @@ export default function AdminDashboard({ onLock }) {
  }
  };
 
- // Robust CSV parser
- const parseCSV = (text) => {
- const lines = text.split(/\r?\n/);
- if (lines.length === 0) return [];
+  // Helper to extract CSV fields with BOM handling and case-insensitive key lookup
+  const getCSVField = (obj, ...candidateNames) => {
+    if (!obj || typeof obj !== 'object') return '';
 
- const headers = splitCSVLine(lines[0]);
- const result = [];
+    for (const candidate of candidateNames) {
+      if (obj[candidate] !== undefined && obj[candidate] !== null && String(obj[candidate]).trim() !== '') {
+        return String(obj[candidate]).trim();
+      }
+    }
 
- for (let i = 1; i < lines.length; i++) {
- const line = lines[i].trim();
- if (!line) continue;
+    for (const candidate of candidateNames) {
+      const candidateNorm = candidate.toLowerCase().replace(/[^a-z0-9]/g, '');
+      for (const rawKey in obj) {
+        const cleanKey = rawKey.replace(/^\ufeff/, '').trim();
+        const keyNorm = cleanKey.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (keyNorm === candidateNorm) {
+          const val = obj[rawKey];
+          if (val !== undefined && val !== null && String(val).trim() !== '') {
+            return String(val).trim();
+          }
+        }
+      }
+    }
 
- const fields = splitCSVLine(line);
- const obj = {};
- headers.forEach((header, idx) => {
- obj[header] = fields[idx] !== undefined ? fields[idx] : "";
- });
- result.push(obj);
- }
- return result;
- };
+    return '';
+  };
 
- const splitCSVLine = (line) => {
- const result = [];
- let current = '';
- let inQuotes = false;
+  // Robust CSV parser with BOM stripping
+  const parseCSV = (text) => {
+    if (!text) return [];
+    const cleanText = text.replace(/^\ufeff/, '');
+    const lines = cleanText.split(/\r?\n/);
+    if (lines.length === 0) return [];
 
- for (let i = 0; i < line.length; i++) {
- const char = line[i];
- if (char === '"') {
- inQuotes = !inQuotes;
- } else if (char === ',' && !inQuotes) {
- result.push(current.trim());
- current = '';
- } else {
- current += char;
- }
- }
- result.push(current.trim());
-  return result.map(v => v.replace(/^"|"$/g, '').trim());
+    const rawHeaders = splitCSVLine(lines[0]);
+    const headers = rawHeaders.map(h => h.replace(/^\ufeff/, '').replace(/^"|"$/g, '').trim());
+    const result = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (!line) continue;
+
+      const fields = splitCSVLine(line);
+      const obj = {};
+      headers.forEach((header, idx) => {
+        if (header) {
+          obj[header] = fields[idx] !== undefined ? fields[idx] : "";
+        }
+      });
+      result.push(obj);
+    }
+    return result;
+  };
+
+  const splitCSVLine = (line) => {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+      } else {
+        current += char;
+      }
+    }
+    result.push(current.trim());
+    return result.map(v => v.replace(/^"|"$/g, '').replace(/""/g, '"').trim());
   };
 
   const extractTeamsFromParsed = (parsed) => {
     const teamsMap = new Map();
 
     parsed.forEach(t => {
-      const teamId = t['TeamID'] || t['TeamId'] || t['teamid'] || t['Team Name'] || t['teamname'] || t['team_name'] || '';
-      if (!teamId || teamId === 'SYSTEM_SETTINGS') return;
+      // Strictly extract TeamID from explicit TeamID column candidates. NEVER fall back to Team Name.
+      const teamId = getCSVField(t, 'TeamID', 'Team ID', 'TeamId', 'team_id', 'teamid', 'Id', 'ID');
+      if (!teamId || teamId.toUpperCase() === 'SYSTEM_SETTINGS') return;
 
-      const teamName = t['TeamName'] || t['Team Name'] || t['teamname'] || t['team_name'] || '';
-      const password = t['Password'] || t['password'] || teamId;
-      const leaderName = t['Leader Name'] || t['LeaderName'] || t['leadername'] || t['leader_name'] || t['Name'] || t['name'] || '';
-      const leaderEmail = t['Leader Email'] || t['LeaderEmail'] || t['leaderemail'] || t['leader_email'] || t['Email'] || t['email'] || '';
-      const leaderPhone = t['Leader Phone'] || t['LeaderPhone'] || t['leaderphone'] || t['leader_phone'] || t['Phone'] || t['phone'] || '';
-      const leaderRegNo = t['Leader RegNo'] || t['LeaderRegNo'] || t['leaderregno'] || t['leader_reg_no'] || t['RegNo'] || t['Reg No'] || t['regno'] || t['reg_no'] || '';
-      const transactionId = t['Transaction ID'] || t['TransactionID'] || t['transactionid'] || t['transaction_id'] || t['TransactionStatus'] || t['transaction_status'] || '';
-      const status = t['Status'] || t['status'] || t['TransactionStatus'] || 'SUCCESS';
-      const submittedAt = t['Submitted At'] || t['SubmittedAt'] || t['submittedat'] || t['submitted_at'] || t['SubmittedTimestamp'] || t['submitted_timestamp'] || '';
+      const teamName = getCSVField(t, 'Team Name', 'TeamName', 'team_name', 'teamname') || teamId;
+      const password = getCSVField(t, 'Password', 'password', 'Pass', 'pass') || teamId;
+      const leaderName = getCSVField(t, 'Leader Name', 'LeaderName', 'leader_name', 'leadername', 'Member Name (Leader Highlighted)', 'Member Name', 'Name', 'name');
+      const leaderEmail = getCSVField(t, 'Leader Email', 'LeaderEmail', 'leader_email', 'leaderemail', 'Email', 'email');
+      const leaderPhone = getCSVField(t, 'Leader Phone', 'LeaderPhone', 'leader_phone', 'leaderphone', 'Phone', 'phone');
+      const leaderRegNo = getCSVField(t, 'Leader RegNo', 'LeaderRegNo', 'leader_reg_no', 'leaderregno', 'Registration No', 'RegNo', 'Reg No', 'regno', 'reg_no');
+      const transactionId = getCSVField(t, 'Transaction ID', 'TransactionID', 'transaction_id', 'transactionid', 'TransactionStatus', 'transaction_status');
+      const status = getCSVField(t, 'Status', 'status', 'TransactionStatus') || 'SUCCESS';
+      const submittedAt = getCSVField(t, 'Submitted At', 'SubmittedAt', 'submitted_at', 'submittedat', 'SubmittedTimestamp', 'submitted_timestamp');
 
       if (!teamsMap.has(teamId)) {
         teamsMap.set(teamId, {
@@ -567,83 +600,103 @@ export default function AdminDashboard({ onLock }) {
     return Array.from(teamsMap.values());
   };
 
-  const extractParticipantsFromParsed = (parsed) => {
+  const extractParticipantsFromParsed = (parsed, existingTeams = []) => {
+    const teamNameToIdMap = new Map();
+    existingTeams.forEach(t => {
+      if (t.TeamName && t.TeamID) {
+        teamNameToIdMap.set(t.TeamName.toLowerCase().trim(), t.TeamID);
+      }
+    });
+
     return parsed.map(p => {
-      const teamId = p['TeamId'] || p['teamid'] || p['TeamID'] || p['Team Name'] || p['teamname'] || '';
-      const rawYear = p['Year'] || p['year'] || '0';
-      const parsedYear = parseInt(rawYear, 10);
+      let teamId = getCSVField(p, 'TeamID', 'Team ID', 'TeamId', 'team_id', 'teamid');
+      const teamName = getCSVField(p, 'Team Name', 'TeamName', 'team_name', 'teamname');
+
+      if (!teamId && teamName && teamNameToIdMap.has(teamName.toLowerCase().trim())) {
+        teamId = teamNameToIdMap.get(teamName.toLowerCase().trim());
+      }
+      if (!teamId) {
+        teamId = teamName;
+      }
+
+      const rawYear = getCSVField(p, 'Year', 'year', 'Department Year');
+      let parsedYear = 0;
+      if (rawYear) {
+        const match = rawYear.match(/\d+/);
+        if (match) parsedYear = parseInt(match[0], 10);
+      }
 
       return {
         TeamId: teamId,
-        Name: p['Name'] || p['name'] || '',
-        RegNo: p['RegNo'] || p['Reg No'] || p['regno'] || p['reg_no'] || '',
-        Email: p['Email'] || p['email'] || '',
-        Phone: p['Phone'] || p['phone'] || '',
-        Gender: p['Gender'] || p['gender'] || '',
-        Branch: p['Branch'] || p['branch'] || '',
+        Name: getCSVField(p, 'Name', 'name', 'Member Name (Leader Highlighted)', 'Member Name', 'Participant Name'),
+        RegNo: getCSVField(p, 'RegNo', 'Reg No', 'Registration No', 'regno', 'reg_no'),
+        Email: getCSVField(p, 'Email', 'email'),
+        Phone: getCSVField(p, 'Phone', 'phone', 'Mobile', 'Mobile No'),
+        Gender: getCSVField(p, 'Gender', 'gender'),
+        Branch: getCSVField(p, 'Branch', 'branch', 'Department', 'Dept'),
         Year: isNaN(parsedYear) ? 0 : parsedYear,
-        Accommodation: p['Accommodation'] || p['accommodation'] || '',
-        HostelName: p['Hostel Name'] || p['hostelname'] || p['hostel_name'] || '',
-        RoomNo: p['Room No'] || p['roomno'] || p['room_no'] || '',
-        WardenName: p['Warden Name'] || p['wardenname'] || p['warden_name'] || '',
-        WardenPhone: p['Warden Phone'] || p['wardenphone'] || p['warden_phone'] || ''
+        Accommodation: getCSVField(p, 'Accommodation', 'accommodation', 'Residence Type'),
+        HostelName: getCSVField(p, 'Hostel Name', 'HostelName', 'hostel_name', 'hostelname'),
+        RoomNo: getCSVField(p, 'Room No', 'Room Number', 'roomno', 'room_no'),
+        WardenName: getCSVField(p, 'Warden Name', 'WardenName', 'warden_name', 'wardenname'),
+        WardenPhone: getCSVField(p, 'Warden Phone', 'WardenPhone', 'warden_phone', 'wardenphone')
       };
     }).filter(p => p.TeamId);
   };
 
- const handleTeamsFileChange = (e) => {
- setCsvError('');
- setImportMessage('');
- const file = e.target.files[0];
- if (!file) return;
+  const handleTeamsFileChange = (e) => {
+    setCsvError('');
+    setImportMessage('');
+    const file = e.target.files[0];
+    if (!file) return;
 
- const reader = new FileReader();
- reader.onload = (event) => {
- try {
- const text = event.target.result;
- const parsed = parseCSV(text);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target.result;
+        const parsed = parseCSV(text);
 
- const teamsMapped = extractTeamsFromParsed(parsed);
- const participantsMapped = extractParticipantsFromParsed(parsed);
+        const teamsMapped = extractTeamsFromParsed(parsed);
+        const participantsMapped = extractParticipantsFromParsed(parsed, teamsMapped);
 
- setParsedTeams(teamsMapped);
- if (participantsMapped.length > 0) {
- setParsedParticipants(participantsMapped);
- }
- } catch (err) {
- console.error(err);
- setCsvError('Failed to parse Teams CSV file.');
- }
- };
- reader.readAsText(file);
- };
+        setParsedTeams(teamsMapped);
+        if (participantsMapped.length > 0) {
+          setParsedParticipants(participantsMapped);
+        }
+      } catch (err) {
+        console.error(err);
+        setCsvError('Failed to parse Teams CSV file.');
+      }
+    };
+    reader.readAsText(file);
+  };
 
- const handleParticipantsFileChange = (e) => {
- setCsvError('');
- setImportMessage('');
- const file = e.target.files[0];
- if (!file) return;
+  const handleParticipantsFileChange = (e) => {
+    setCsvError('');
+    setImportMessage('');
+    const file = e.target.files[0];
+    if (!file) return;
 
- const reader = new FileReader();
- reader.onload = (event) => {
- try {
- const text = event.target.result;
- const parsed = parseCSV(text);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target.result;
+        const parsed = parseCSV(text);
 
- const participantsMapped = extractParticipantsFromParsed(parsed);
- const teamsMapped = extractTeamsFromParsed(parsed);
+        const participantsMapped = extractParticipantsFromParsed(parsed, parsedTeams);
+        const teamsMapped = extractTeamsFromParsed(parsed);
 
- setParsedParticipants(participantsMapped);
- if (teamsMapped.length > 0) {
- setParsedTeams(teamsMapped);
- }
- } catch (err) {
- console.error(err);
- setCsvError('Failed to parse Participants CSV file.');
- }
- };
- reader.readAsText(file);
- };
+        setParsedParticipants(participantsMapped);
+        if (teamsMapped.length > 0) {
+          setParsedTeams(teamsMapped);
+        }
+      } catch (err) {
+        console.error(err);
+        setCsvError('Failed to parse Participants CSV file.');
+      }
+    };
+    reader.readAsText(file);
+  };
 
  const handleImportData = async () => {
  if (parsedTeams.length === 0) {
