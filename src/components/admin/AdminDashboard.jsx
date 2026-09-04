@@ -481,6 +481,51 @@ export default function AdminDashboard({ onLock }) {
  }
  };
 
+  const handleDownloadSelectionsCSV = () => {
+    if (!teamsList || teamsList.length === 0) {
+      alert('No team selection data available to download.');
+      return;
+    }
+
+    const sortedTeams = [...teamsList].sort((a, b) => (a.TeamID || '').localeCompare(b.TeamID || '', undefined, { numeric: true }));
+
+    const headers = ['Team ID', 'Team Name', 'Leader Name', 'Leader Email', 'Leader Phone', 'Leader RegNo', 'Selected Challenge', 'Status'];
+
+    const rows = sortedTeams.map(t => {
+      const problem = t.SelectedProblem || t.selectedProblem || '';
+      const status = problem ? 'LOCKED' : 'PENDING';
+      const teamId = t.TeamID || '';
+      const teamName = t['Team Name'] || t.teamName || t.team_name || '';
+      const leaderName = t['Leader Name'] || t.leaderName || '';
+      const leaderEmail = t['Leader Email'] || t.leaderEmail || '';
+      const leaderPhone = t['Leader Phone'] || t.leaderPhone || '';
+      const leaderRegNo = t['Leader RegNo'] || t.leaderRegNo || '';
+      const selectedChallenge = problem || 'Awaiting selection...';
+
+      return [
+        `"${teamId.replace(/"/g, '""')}"`,
+        `"${teamName.replace(/"/g, '""')}"`,
+        `"${leaderName.replace(/"/g, '""')}"`,
+        `"${leaderEmail.replace(/"/g, '""')}"`,
+        `"${leaderPhone.replace(/"/g, '""')}"`,
+        `"${leaderRegNo.replace(/"/g, '""')}"`,
+        `"${selectedChallenge.replace(/"/g, '""')}"`,
+        `"${status}"`
+      ].join(',');
+    });
+
+    const csvContent = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `disfrutar26_team_selections_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   // Helper to extract CSV fields with BOM handling and case-insensitive key lookup
   const getCSVField = (obj, ...candidateNames) => {
     if (!obj || typeof obj !== 'object') return '';
@@ -1817,6 +1862,14 @@ export default function AdminDashboard({ onLock }) {
  <div className="flex justify-between items-center mb-6 pb-3 border-b border-white/5">
  <h2 className="text-md font-bold text-slate-200 uppercase tracking-wider">Active Problem Selections</h2>
  <div className="flex items-center gap-3">
+ <button
+ onClick={handleDownloadSelectionsCSV}
+ className="text-[10px] border px-3 py-1.5 rounded-xl transition-all uppercase tracking-wider font-semibold font-mono-custom text-emerald-400 hover:text-emerald-300 bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/20 cursor-pointer flex items-center gap-1.5"
+ title="Download team problem selections as CSV"
+ >
+ <Download className="w-3.5 h-3.5" />
+ <span>Download CSV</span>
+ </button>
  <button
  onClick={() => setShowTeamsSection(false)}
  className="text-[10px] border px-3 py-1.5 rounded-xl transition-all uppercase tracking-wider font-semibold font-mono-custom text-slate-400 hover:text-slate-200 bg-white/5 border-white/10 hover:bg-white/10 cursor-pointer"
